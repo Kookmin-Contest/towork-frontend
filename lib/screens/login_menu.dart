@@ -9,6 +9,9 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
+  TextEditingController controller = TextEditingController();
+  TextEditingController controller2 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +20,11 @@ class _LogInState extends State<LogIn> {
           backgroundColor: Colors.blueAccent,
           centerTitle: true
       ),
-      body: SingleChildScrollView(
+      body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child:SingleChildScrollView(
         child: Column(
           children: [
             Padding(padding: (EdgeInsets.only(top: 30)),
@@ -45,6 +52,7 @@ class _LogInState extends State<LogIn> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextField(
+                      controller: controller,
                       decoration: InputDecoration(
                           hintText: '이메일을 입력해주세요',
                           enabledBorder: OutlineInputBorder(
@@ -60,6 +68,7 @@ class _LogInState extends State<LogIn> {
                       height: 7.0,
                     ),
                     TextField(
+                      controller: controller2,
                       decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요',
                           enabledBorder: OutlineInputBorder(
@@ -84,7 +93,9 @@ class _LogInState extends State<LogIn> {
                               color: Colors.white,
                               size: 35.0,
                             ),
-                            onPressed: (){})
+                            onPressed: (){
+                              //TODO : 로그인 연결하기
+                            })
                     ),
                     SizedBox(
                       height: 30.0,
@@ -100,7 +111,9 @@ class _LogInState extends State<LogIn> {
                                 fontWeight: FontWeight.w600
                             ),
                           ),
-                          onPressed: (){},
+                          onPressed: (){
+                            //TODO : 아이디/비밀번호 찾기 연결하기
+                          },
                         )
                     ),
                     SizedBox(
@@ -114,7 +127,9 @@ class _LogInState extends State<LogIn> {
                                 fontWeight: FontWeight.w600
                             ),
                           ),
-                          onPressed: (){},
+                          onPressed: (){
+                            //TODO : 회원가입 메뉴 연결하기
+                          },
                         )
                     ),
                   ],
@@ -125,6 +140,16 @@ class _LogInState extends State<LogIn> {
           ],
         ),
       ),
+      )
     );
+  }
+
+  void showSnackBar(BuildContext context, Text text) {
+    final snackBar = SnackBar(
+      content: text,
+      backgroundColor: Color.fromARGB(255, 112, 48, 48),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

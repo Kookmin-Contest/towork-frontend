@@ -7,6 +7,7 @@ class MenuBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         onTap: (int index){
+          //TODO : 하단바 메뉴에 아이템 추가하기
           switch (index){
             case 0:
               Navigator.pushNamed(context, '/');
