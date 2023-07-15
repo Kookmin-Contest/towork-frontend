@@ -67,8 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  // 이 부분에 회원가입 로직을 추가해주세요.
-                  // 예를 들어, Firebase를 사용한다면
+                  // 이 부분에 회원가입 로직 해야됨!!
                   // FirebaseAuth.instance.createUserWithEmailAndPassword(...)
                 }
               },
