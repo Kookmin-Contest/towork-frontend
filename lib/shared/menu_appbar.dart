@@ -9,7 +9,7 @@ class RoundAppBar extends StatelessWidget implements PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Center(child: Text('메인 화면')),
+      title: Center(child: Text('화면')),
       actions: <Widget>[
           IconButton(icon: Icon(Icons.perm_identity_rounded), onPressed: () {})
       ],
