@@ -15,6 +15,8 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
     return Scaffold(
       appBar: AppBar(
           title: Text('로그인'),
@@ -37,7 +39,9 @@ class _LogInState extends State<LogIn> {
                 height: 140,
               ),
             ),
-            Form(child: Theme(
+            Form(
+              key: _formKey,
+              child: Theme(
               data: ThemeData(
                 primaryColor: Colors.grey,
                 inputDecorationTheme: InputDecorationTheme(
@@ -52,7 +56,7 @@ class _LogInState extends State<LogIn> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextField(
+                    TextFormField(
                       controller: controller,
                       decoration: InputDecoration(
                           hintText: '이메일을 입력해주세요',
@@ -63,12 +67,18 @@ class _LogInState extends State<LogIn> {
                               )
                           )
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '이메일을 입력해주세요.';
+                        }
+                        return null;
+                      },
                       keyboardType: TextInputType.emailAddress,
                     ),
                     SizedBox(
                       height: 7.0,
                     ),
-                    TextField(
+                    TextFormField(
                       controller: controller2,
                       decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요',
@@ -80,6 +90,12 @@ class _LogInState extends State<LogIn> {
                           )
                       ),
                       keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '비밀번호를 입력해주세요.';
+                        }
+                        return null;
+                      },
                       obscureText: true,
                     ),
                     SizedBox(
@@ -95,7 +111,9 @@ class _LogInState extends State<LogIn> {
                               size: 35.0,
                             ),
                             onPressed: (){
-                              //TODO : 로그인 연결하기
+                              if (_formKey.currentState!.validate()) {
+                                //TODO : 로그인 연결하기
+                              }
                             })
                     ),
                     SizedBox(
