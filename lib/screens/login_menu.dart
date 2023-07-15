@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gotowork/screens/register_menu.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LogIn extends StatefulWidget {
@@ -128,7 +129,10 @@ class _LogInState extends State<LogIn> {
                             ),
                           ),
                           onPressed: (){
-                            //TODO : 회원가입 메뉴 연결하기
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Register())
+                            );
                           },
                         )
                     ),
