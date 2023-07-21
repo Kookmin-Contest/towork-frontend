@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gotowork/widgets/calendar.dart';
 
 class HomeMenu extends StatefulWidget {
   const HomeMenu({super.key});
@@ -13,7 +14,12 @@ class _HomeMenuState extends State<HomeMenu> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Text('Test'),
+          child: Column(
+            children: [
+              SizedBox(height: 100.0),
+              Calendar(),
+            ],
+          )
         ),
       ),
     );
