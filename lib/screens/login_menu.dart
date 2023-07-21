@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/screens/register_menu.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -12,6 +14,7 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   TextEditingController controller = TextEditingController();
   TextEditingController controller2 = TextEditingController();
+  static final storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -102,19 +105,45 @@ class _LogInState extends State<LogIn> {
                       height: 20.0,
                     ),
                     ButtonTheme(
-                        minWidth: 100.0 ,
+                      minWidth: 10,
                         height: 50.0,
                         child: ElevatedButton(
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                              size: 35.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.email,
+                                  color: Colors.white,
+                                  size: 30.0,
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text('이메일로 로그인 하기')
+                              ],
                             ),
-                            onPressed: (){
+                            onPressed: () async{
                               if (_formKey.currentState!.validate()) {
-                                //TODO : 로그인 연결하기
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => MainMenu())
+                                );
                               }
                             })
+                    ),
+                    Text('or'),
+                    SignInButton(
+                      Buttons.Google,
+                      onPressed: () async {
+                      },
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Divider(
+                      height: 10.0,
+                      color: Colors.grey,
+                      thickness: 0.8,
                     ),
                     SizedBox(
                       height: 30.0,

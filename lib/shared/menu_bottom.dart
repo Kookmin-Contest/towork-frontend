@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
 
-class MenuBottom extends StatelessWidget {
-  const MenuBottom({super.key});
+class MenuBottom extends StatefulWidget {
+  MenuBottom({super.key, required this.currentindex});
+  int currentindex;
+
+  @override
+  State<MenuBottom> createState() => _MenuBottomState();
+}
+
+class _MenuBottomState extends State<MenuBottom> {
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        onTap: (int index){
-          //TODO : 하단바 메뉴에 아이템 추가하기
-          switch (index){
-            case 0:
-              Navigator.pushNamed(context, '/');
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/');
-              break;
-            default:
-          }
-        },
-        items: const[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label : 'Home')
-        ]);
+      type: BottomNavigationBarType.fixed,
+      currentIndex: widget.currentindex,
+      onTap: _onPageChanged,
+      items: [
+        BottomNavigationBarItem(
+            icon: Icon(Icons.abc_outlined),
+            label: "test"
+        )
+      ],
+    );
+  }
+
+  void _onPageChanged(int index) {
+    if (widget.currentindex == index) return;
+    setState(() {
+      widget.currentindex = index;
+    });
   }
 }
-
