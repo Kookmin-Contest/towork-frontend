@@ -10,6 +10,8 @@ class RoundAppBar extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
       title: Center(child: Text('화면')),
+      centerTitle: true,
+      leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
       actions: <Widget>[
           IconButton(icon: Icon(Icons.perm_identity_rounded), onPressed: () {})
       ],
