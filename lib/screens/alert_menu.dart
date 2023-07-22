@@ -13,6 +13,7 @@ class _AlertMenuState extends State<AlertMenu> {
     return Scaffold(
       body: SafeArea(
         child: Center(
+          // TODO : 쪽지함 화면 만들기
           child: Text('쪽지함 넣을 메뉴입니다'),
         ),
       ),

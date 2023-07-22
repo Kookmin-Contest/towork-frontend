@@ -13,6 +13,7 @@ class _MypageMenuState extends State<MypageMenu> {
     return Scaffold(
       body: SafeArea(
         child: Center(
+          // TODO : 마이페이지 화면 만들기
           child: Text('마이페이지 넣을 메뉴입니다'),
         ),
       ),

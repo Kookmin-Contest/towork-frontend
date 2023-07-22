@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// 끝이 둥근 Appbar 만들어둔겁니다. 필요없으면 지울 예정
 class RoundAppBar extends StatelessWidget implements PreferredSizeWidget{
   final double barHeight = 50;
   const RoundAppBar({super.key});

@@ -12,14 +12,16 @@ class _HomeMenuState extends State<HomeMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 100.0),
-              Calendar(),
-            ],
-          )
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: 100.0),
+                Calendar(),
+              ],
+            )
+          ),
         ),
       ),
     );

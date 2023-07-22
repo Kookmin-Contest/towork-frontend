@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/screens/alert_menu.dart';
 import 'package:gotowork/screens/community_menu.dart';
 import 'package:gotowork/screens/home_menu.dart';
-import 'package:gotowork/screens/login_menu.dart';
 import 'package:gotowork/screens/mypage_menu.dart';
-import 'package:gotowork/screens/register_menu.dart';
 import 'package:gotowork/screens/setting_menu.dart';
-import 'package:gotowork/shared/menu_appbar.dart';
-import 'package:gotowork/shared/menu_bottom.dart';
-
-//TODO : 메인 메뉴 만들기
+import 'dart:async';
 
 class Main extends StatelessWidget {
   @override
@@ -60,6 +56,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
+  late DateTime _lastPressed;
 
   @override
   void dispose() {
@@ -69,54 +66,67 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('메인'),
-        backgroundColor: Colors.blueAccent
-      ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _routes.map((route) => route.page).toList(),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-                child: Row(
-                  children: [
-                    Icon(Icons.perm_identity_rounded),
-                    SizedBox(width: 10.0,),
-                    Text('조현진님 반갑습니다!')
-                  ],
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                ),
-            ),
-            ListTile(
-              title: Text('워크스페이스 1'),
-              onTap: (){
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('워크스페이스 2'),
-              onTap: (){
-                Navigator.pop(context);
-              },
-            )
-          ],
+    return WillPopScope(
+      onWillPop: () async{
+        final now = DateTime.now();
+        if(now.difference(_lastPressed) > Duration(seconds: 2)){
+            _lastPressed = now;
+            final msg = "뒤로가기 버튼을 한 번 더 누르면 종료됩니다";
+
+            Fluttertoast.showToast(msg: msg);
+            return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('메인'),
+          backgroundColor: Colors.blueAccent
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-        items: _routes.map((route) {
-          return BottomNavigationBarItem(icon: route.icon, label: route.name);
-        }).toList()
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _routes.map((route) => route.page).toList(),
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+                UserAccountsDrawerHeader(
+                  accountEmail: Text("mclub4@kookmin.ac.kr"),
+                  accountName: Text("조현진님 반갑습니다!"),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: AssetImage("assets/logo.png"),
+                    backgroundColor: Colors.white,
+                  ),
+                  onDetailsPressed: (){},
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                  ),
+              ),
+              ListTile(
+                title: Text('워크스페이스 1'),
+                onTap: (){
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('워크스페이스 2'),
+                onTap: (){
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          onTap: _onTap,
+          items: _routes.map((route) {
+            return BottomNavigationBarItem(icon: route.icon, label: route.name);
+          }).toList()
+        )
       )
     );
   }

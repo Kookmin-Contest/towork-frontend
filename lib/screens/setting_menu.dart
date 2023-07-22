@@ -13,6 +13,7 @@ class _SettingMenuState extends State<SettingMenu> {
     return Scaffold(
       body: SafeArea(
         child: Center(
+          //TODO : 환경설정 메뉴 만들기
           child: Text('환경설정 넣을 메뉴입니다'),
         ),
       ),
