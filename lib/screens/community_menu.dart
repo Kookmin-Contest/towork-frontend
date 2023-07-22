@@ -13,6 +13,7 @@ class _CommunityMenuState extends State<CommunityMenu> {
     return Scaffold(
       body: SafeArea(
         child: Center(
+          //TODO : 커뮤니티 화면 만들기
           child: Text('커뮤니티 넣을 메뉴입니다'),
         ),
       ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/screens/register_menu.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
@@ -14,7 +17,52 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   TextEditingController controller = TextEditingController();
   TextEditingController controller2 = TextEditingController();
+  dynamic userinfo = "";
   static final storage = FlutterSecureStorage();
+
+  @override
+  void initState(){
+      super.initState();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _asyncMethod();
+      });
+  }
+
+  _asyncMethod() async{
+      userinfo = await storage.read(key: 'login');
+
+      if(userinfo != null){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainMenu()),
+              (route) => false,
+        );
+      }
+  }
+
+  login(String accountName, String password) async{
+      try{
+          var dio = Dio();
+          var param = {'account_name': '$accountName', 'password': '$password'};
+
+          Response response = await dio.post('localhost:8080/auth/login', data: param);
+
+          if(response.statusCode == 200){
+            String token = response.data['token'];
+
+            await storage.write(key: 'login', value: "Test");
+
+            return true;
+          }
+
+          return false;
+      }
+      catch(e){
+          return false;
+      }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,10 +172,16 @@ class _LogInState extends State<LogIn> {
                             ),
                             onPressed: () async{
                               if (_formKey.currentState!.validate()) {
-                                Navigator.push(
+                                // TODO : 토큰 확인 후 로그인 하기
+                                if(login(controller.text, controller2.text)){
+                                  // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
+                                  // 로그인화면 스택에서 제거하고 이동해야됩니다!!
+                                  Navigator.pushAndRemoveUntil(
                                     context,
-                                    MaterialPageRoute(builder: (context) => MainMenu())
-                                );
+                                    MaterialPageRoute(builder: (context) => MainMenu()),
+                                        (route) => false,
+                                  );
+                                }
                               }
                             })
                     ),
