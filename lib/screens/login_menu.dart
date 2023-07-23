@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/screens/register_menu.dart';
 import 'package:dio/dio.dart';
@@ -15,8 +16,8 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  TextEditingController controller = TextEditingController();
-  TextEditingController controller2 = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   dynamic userinfo = "";
   static final storage = FlutterSecureStorage();
 
@@ -41,24 +42,36 @@ class _LogInState extends State<LogIn> {
       }
   }
 
-  login(String accountName, String password) async{
+   login(accountName, password) async{
       try{
           var dio = Dio();
-          var param = {'account_name': '$accountName', 'password': '$password'};
-
-          Response response = await dio.post('localhost:8080/auth/login', data: param);
-
+          var param = jsonEncode({'username': '$accountName', 'password': '$password'});
+          Response response = await dio.post(
+            'http://10.0.2.2:8080/auth/login',
+            data: param,
+            options: Options(contentType: Headers.jsonContentType)
+          );
+          print(response.statusCode);
           if(response.statusCode == 200){
-            String token = response.data['token'];
-
-            await storage.write(key: 'login', value: "Test");
-
+            print(response.statusMessage);
             return true;
           }
-
+          else if(response.statusCode == 403 || response.statusCode == 400){
+            final msg = "아이디 또는 비밀번호가 잘못되었습니다.";
+            Fluttertoast.showToast(msg: msg);
+            return false;
+          }
+          final msg = "로그인에 실패하였습니다.";
+          Fluttertoast.showToast(msg: msg);
           return false;
       }
+      on DioError catch(e){
+
+      }
       catch(e){
+          print(e);
+          final msg = "로그인에 실패하였습니다.";
+          Fluttertoast.showToast(msg: msg);
           return false;
       }
   }
@@ -106,85 +119,16 @@ class _LogInState extends State<LogIn> {
                 padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      controller: controller,
-                      decoration: InputDecoration(
-                          hintText: '이메일을 입력해주세요',
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(15)),
-                              borderSide: BorderSide(
-                                  color: Colors.grey
-                              )
-                          )
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '이메일을 입력해주세요.';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                    ),
+                  children: <Widget>[
+                    _EmailField(),
                     SizedBox(
                       height: 7.0,
                     ),
-                    TextFormField(
-                      controller: controller2,
-                      decoration: InputDecoration(
-                          hintText: '비밀번호를 입력해주세요',
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(15)),
-                              borderSide: BorderSide(
-                                  color: Colors.grey
-                              )
-                          )
-                      ),
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '비밀번호를 입력해주세요.';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                    ),
+                    _PasswordField(),
                     SizedBox(
                       height: 20.0,
                     ),
-                    ButtonTheme(
-                      minWidth: 10,
-                        height: 50.0,
-                        child: ElevatedButton(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.email,
-                                  color: Colors.white,
-                                  size: 30.0,
-                                ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text('이메일로 로그인 하기')
-                              ],
-                            ),
-                            onPressed: () async{
-                              if (_formKey.currentState!.validate()) {
-                                // TODO : 토큰 확인 후 로그인 하기
-                                if(login(controller.text, controller2.text)){
-                                  // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
-                                  // 로그인화면 스택에서 제거하고 이동해야됩니다!!
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => MainMenu()),
-                                        (route) => false,
-                                  );
-                                }
-                              }
-                            })
-                    ),
+                    _EmailLoginButton(_formKey),
                     Text('or'),
                     SignInButton(
                       Buttons.Google,
@@ -246,6 +190,87 @@ class _LogInState extends State<LogIn> {
         ),
       ),
       )
+    );
+  }
+
+  Widget _EmailField(){
+    return TextFormField(
+      controller: email,
+      decoration: InputDecoration(
+          hintText: '이메일을 입력해주세요',
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderSide: BorderSide(
+                  color: Colors.grey
+              )
+          )
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '이메일을 입력해주세요.';
+        }
+        return null;
+      },
+      keyboardType: TextInputType.emailAddress,
+    );
+  }
+
+  Widget _PasswordField(){
+    return TextFormField(
+      controller: password,
+      decoration: InputDecoration(
+          hintText: '비밀번호를 입력해주세요',
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+              borderSide: BorderSide(
+                  color: Colors.grey
+              )
+          )
+      ),
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '비밀번호를 입력해주세요.';
+        }
+        return null;
+      },
+      obscureText: true,
+    );
+  }
+
+  Widget _EmailLoginButton(_formKey){
+    return ButtonTheme(
+        minWidth: 10,
+        height: 50.0,
+        child: ElevatedButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.email,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text('이메일로 로그인 하기')
+              ],
+            ),
+            onPressed: () async{
+              if (_formKey.currentState!.validate()) {
+                // TODO : 토큰 확인 후 로그인 하기
+                if(await login(email.text, password.text) == true){
+                  // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
+                  // 로그인화면 스택에서 제거하고 이동해야됩니다!!
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainMenu()),
+                        (route) => false,
+                  );
+                }
+              }
+            })
     );
   }
 
