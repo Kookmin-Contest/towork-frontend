@@ -7,6 +7,8 @@ import 'package:gotowork/screens/mypage_menu.dart';
 import 'package:gotowork/screens/setting_menu.dart';
 import 'dart:async';
 
+import 'package:gotowork/shared/menu_appbar.dart';
+
 class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -38,10 +40,10 @@ class NavigationRoute {
 // 하단 메뉴바 Items들
 // 표시할 라벨, 아이콘, 이동할 페이지 순으로 넣어주시면 됩니다
 final List<NavigationRoute> _routes = [
-  new NavigationRoute(name: "홈", icon: Icon(Icons.home), page: HomeMenu()),
   new NavigationRoute(name: "커뮤니티", icon: Icon(Icons.chat_bubble), page: CommunityMenu()),
   new NavigationRoute(name: "마이페이지", icon: Icon(Icons.perm_identity_rounded), page: MypageMenu()),
-  new NavigationRoute(name: "알림", icon: Icon(Icons.add_alert), page: AlertMenu()),
+  new NavigationRoute(name: "홈", icon: Icon(Icons.home), page: HomeMenu()),
+  new NavigationRoute(name: "요청", icon: Icon(Icons.document_scanner_outlined), page: AlertMenu()),
   new NavigationRoute(name: "환경설정", icon: Icon(Icons.settings), page: SettingMenu())
 ];
 
@@ -55,7 +57,7 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   final PageController _pageController = PageController();
-  int _currentIndex = 0;
+  int _currentIndex = 2;
   late DateTime _lastPressed;
 
   @override
@@ -79,11 +81,7 @@ class _MainMenuState extends State<MainMenu> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('메인'),
-          backgroundColor: Colors.blueAccent
-        ),
+        appBar: RoundAppBar(),
         body: IndexedStack(
           index: _currentIndex,
           children: _routes.map((route) => route.page).toList(),
@@ -101,8 +99,14 @@ class _MainMenuState extends State<MainMenu> {
                   ),
                   onDetailsPressed: (){},
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey,
+                    color: const Color(0xff9dcff7),
                   ),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+                child: Text('WorkSpace',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                ),
               ),
               ListTile(
                 title: Text('워크스페이스 1'),
@@ -122,6 +126,7 @@ class _MainMenuState extends State<MainMenu> {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
+          selectedItemColor: Colors.blueAccent,
           onTap: _onTap,
           items: _routes.map((route) {
             return BottomNavigationBarItem(icon: route.icon, label: route.name);
@@ -130,6 +135,7 @@ class _MainMenuState extends State<MainMenu> {
       )
     );
   }
+
 
   void _onTap(int index){
     if(_currentIndex == index) return;
