@@ -17,7 +17,7 @@ class _HomeMenuState extends State<HomeMenu> {
           child: Center(
             child: Column(
               children: [
-                SizedBox(height: 100.0),
+                SizedBox(height: 40.0),
                 Calendar(),
               ],
             )
