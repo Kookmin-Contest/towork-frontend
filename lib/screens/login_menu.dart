@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/screens/register_menu.dart';
 import 'package:dio/dio.dart';
@@ -40,6 +41,10 @@ class _LogInState extends State<LogIn> {
               (route) => false,
         );
       }
+      else{
+        final msg = "로그인을 해주세요";
+        Fluttertoast.showToast(msg: msg);
+      }
   }
 
    login(accountName, password) async{
@@ -51,15 +56,19 @@ class _LogInState extends State<LogIn> {
             data: param,
             options: Options(contentType: Headers.jsonContentType)
           );
-          print(response.statusCode);
+
           if(response.statusCode == 200){
-            print(response.statusMessage);
-            return true;
-          }
-          else if(response.statusCode == 403 || response.statusCode == 400){
-            final msg = "아이디 또는 비밀번호가 잘못되었습니다.";
+            final accesstoken = json.decode(response.data['accessToken'].toString());
+            final refreshtoken = json.decode(response.data['refreshToken'].toString());
+
+            var value = jsonEncode(Login('$accountName', '$password', '$accesstoken', '$refreshtoken'));
+
+            await storage.write(key: 'login', value: value,);
+
+            final msg = "로그인에 성공하였습니다.";
             Fluttertoast.showToast(msg: msg);
-            return false;
+
+            return true;
           }
           final msg = "로그인에 실패하였습니다.";
           Fluttertoast.showToast(msg: msg);
