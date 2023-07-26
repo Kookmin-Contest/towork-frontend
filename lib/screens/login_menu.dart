@@ -20,6 +20,7 @@ class _LogInState extends State<LogIn> {
   TextEditingController password = TextEditingController();
   dynamic userinfo = "";
   static final storage = FlutterSecureStorage();
+  bool error = false;
 
   @override
   void initState(){
@@ -44,14 +45,16 @@ class _LogInState extends State<LogIn> {
 
    login(accountName, password) async{
       try{
-          var dio = Dio();
+          var dio = Dio(BaseOptions(
+            connectTimeout: 5000;
+            receiveTimeout: 5000;
+          ));
           var param = jsonEncode({'username': '$accountName', 'password': '$password'});
           Response response = await dio.post(
             'http://10.0.2.2:8080/auth/login',
             data: param,
             options: Options(contentType: Headers.jsonContentType)
           );
-          print(response.statusCode);
           if(response.statusCode == 200){
             print(response.statusMessage);
             return true;
@@ -66,7 +69,11 @@ class _LogInState extends State<LogIn> {
           return false;
       }
       on DioError catch(e){
-
+          if(e.type == DioErrorType.connectTimeout){
+            final msg = "연결에 실패하였습니다.";
+            Fluttertoast.showToast(msg: msg);
+            return false;
+          }
       }
       catch(e){
           print(e);
@@ -89,7 +96,7 @@ class _LogInState extends State<LogIn> {
       ),
       body: GestureDetector(
           onTap: () {
-            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
           },
           child:SingleChildScrollView(
         child: Column(
