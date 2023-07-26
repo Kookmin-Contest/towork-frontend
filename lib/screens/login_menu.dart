@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/screens/register_menu.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
+import 'package:uuid/uuid.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -19,6 +22,7 @@ class _LogInState extends State<LogIn> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   dynamic userinfo = "";
+  bool error = false;
   static final storage = FlutterSecureStorage();
 
   @override
@@ -30,6 +34,7 @@ class _LogInState extends State<LogIn> {
       });
   }
 
+  // 자동 로그인 매서드
   _asyncMethod() async{
       userinfo = await storage.read(key: 'login');
 
@@ -40,42 +45,94 @@ class _LogInState extends State<LogIn> {
               (route) => false,
         );
       }
+      else{
+        final msg = "로그인을 해주세요";
+        Fluttertoast.showToast(msg: msg);
+      }
   }
 
-   login(accountName, password) async{
+  // 일반적인 이메일 로그인 방식
+   login(accountName, password, formKey) async{
       try{
-          var dio = Dio();
+          var dio = Dio(BaseOptions(
+              connectTimeout: 5000,
+              receiveTimeout: 5000
+          ));
+
           var param = jsonEncode({'username': '$accountName', 'password': '$password'});
           Response response = await dio.post(
             'http://10.0.2.2:8080/auth/login',
             data: param,
             options: Options(contentType: Headers.jsonContentType)
           );
+
           print(response.statusCode);
+
           if(response.statusCode == 200){
-            print(response.statusMessage);
-            return true;
-          }
-          else if(response.statusCode == 403 || response.statusCode == 400){
-            final msg = "아이디 또는 비밀번호가 잘못되었습니다.";
+            final accesstoken = json.decode(response.data['accessToken'].toString());
+            final refreshtoken = json.decode(response.data['refreshToken'].toString());
+
+            var value = jsonEncode(Login('$accountName', '$password', '$accesstoken', '$refreshtoken'));
+
+            await storage.write(key: 'login', value: value,);
+
+            final msg = "로그인에 성공하였습니다.";
             Fluttertoast.showToast(msg: msg);
-            return false;
+
+            return true;
           }
           final msg = "로그인에 실패하였습니다.";
           Fluttertoast.showToast(msg: msg);
           return false;
       }
       on DioError catch(e){
-
+          if(e.type == DioErrorType.connectTimeout){
+            final msg = "서버에 문제가 생겨 로그인에 실패했습니다";
+            Fluttertoast.showToast(msg: msg);
+          }
+          if(e.response?.statusCode == 302){
+            error = true;
+            formKey.currentState!.validate();
+            error = false;
+            final msg = "아이디 또는 비밀번호가 일치하지 않습니다";
+            Fluttertoast.showToast(msg: msg);
+          }
       }
       catch(e){
-          print(e);
           final msg = "로그인에 실패하였습니다.";
           Fluttertoast.showToast(msg: msg);
           return false;
       }
   }
 
+  //api로 로그인했을때 접속 코드입니다. 현재 오류가 있어서 안쓰일 수도 있습니다.
+  void goggleSocialLogin() async{
+    final clientState = Uuid().v4();
+    final url = Uri.http('10.0.2.2:8080', '/oauth2/authorization/goggle?', {
+      'response_type': 'code',
+      'client_id': '이곳은 구글에서 설정한 REST API KEY를 넣어준다.',
+      'redirect_uri': 'http://10.0.2.2:8080/auth/social-login',
+      'state': clientState,
+    });
+
+    try{
+      final result = await FlutterWebAuth.authenticate(url: url.toString(), callbackUrlScheme: "webauthcallback");
+      final body = Uri.parse(result).queryParameters;
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  //snackbar 표시
+  void showSnackBar(BuildContext context, Text text) {
+    final snackBar = SnackBar(
+      content: text,
+      backgroundColor: Color.fromARGB(255, 112, 48, 48),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,103 +149,105 @@ class _LogInState extends State<LogIn> {
             FocusScope.of(context).unfocus();
           },
           child:SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(padding: (EdgeInsets.only(top: 30)),
-            ),
-            Center(
-              child: Image(
-                image: AssetImage('assets/logo.png'),
-                width: 140,
-                height: 140,
-              ),
-            ),
-            Form(
-              key: _formKey,
-              child: Theme(
-              data: ThemeData(
-                primaryColor: Colors.grey,
-                inputDecorationTheme: InputDecorationTheme(
-                    labelStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15.0
-                    )
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              children: [
+                Padding(padding: (EdgeInsets.only(top: 30)),
                 ),
-              ),
-              child: Container(
-                padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _EmailField(),
-                    SizedBox(
-                      height: 7.0,
-                    ),
-                    _PasswordField(),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    _EmailLoginButton(_formKey),
-                    Text('or'),
-                    SignInButton(
-                      Buttons.Google,
-                      onPressed: () async {
-                      },
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Divider(
-                      height: 10.0,
-                      color: Colors.grey,
-                      thickness: 0.8,
-                    ),
-                    SizedBox(
-                      height: 30.0,
-                    ),
-                    SizedBox(
-                        width: 200.0,
-                        height: 40.0,
-                        child: TextButton(
-                          child: Text("아이디/비밀번호 찾기",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w600
-                            ),
-                          ),
-                          onPressed: (){
-                            //TODO : 아이디/비밀번호 찾기 연결하기
-                          },
+                Center(
+                  child: Image(
+                    image: AssetImage('assets/logo.png'),
+                    width: 140,
+                    height: 140,
+                  ),
+                ),
+                Form(
+                  key: _formKey,
+                  child: Theme(
+                  data: ThemeData(
+                    primaryColor: Colors.grey,
+                    inputDecorationTheme: InputDecorationTheme(
+                        labelStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15.0
                         )
                     ),
-                    SizedBox(
-                        width: 80.0,
-                        height: 40.0,
-                        child: TextButton(
-                          child: Text("회원 가입",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w600
-                            ),
-                          ),
-                          onPressed: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Register())
-                            );
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        _EmailField(),
+                        SizedBox(
+                          height: 7.0,
+                        ),
+                        _PasswordField(),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        _EmailLoginButton(_formKey),
+                        Text('or'),
+                        SignInButton(
+                          Buttons.Google,
+                          onPressed: () async {
+                            goggleSocialLogin();
                           },
-                        )
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Divider(
+                          height: 10.0,
+                          color: Colors.grey,
+                          thickness: 0.8,
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        SizedBox(
+                            width: 200.0,
+                            height: 40.0,
+                            child: TextButton(
+                              child: Text("아이디/비밀번호 찾기",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w600
+                                ),
+                              ),
+                              onPressed: (){
+                                //TODO : 아이디/비밀번호 찾기 연결하기
+                              },
+                            )
+                        ),
+                        SizedBox(
+                            width: 80.0,
+                            height: 40.0,
+                            child: TextButton(
+                              child: Text("회원 가입",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w600
+                                ),
+                              ),
+                              onPressed: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Register())
+                                );
+                              },
+                            )
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                ),
+              ],
             ),
-            ),
-          ],
-        ),
-      ),
+          ),
       )
     );
   }
@@ -205,11 +264,14 @@ class _LogInState extends State<LogIn> {
               )
           )
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '이메일을 입력해주세요.';
-        }
-        return null;
+      validator: (value){
+          if(value == null || value.isEmpty){
+            return "이메일을 입력해주세요.";
+          }
+          else if(error){
+            return "아이디 또는 비밀번호가 잘못되었습니다.";
+          }
+          return null;
       },
       keyboardType: TextInputType.emailAddress,
     );
@@ -228,9 +290,12 @@ class _LogInState extends State<LogIn> {
           )
       ),
       keyboardType: TextInputType.text,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '비밀번호를 입력해주세요.';
+      validator: (value){
+        if(value == null || value.isEmpty){
+          return "이메일을 입력해주세요.";
+        }
+        else if(error){
+          return "아이디 또는 비밀번호가 잘못되었습니다.";
         }
         return null;
       },
@@ -259,8 +324,7 @@ class _LogInState extends State<LogIn> {
             ),
             onPressed: () async{
               if (_formKey.currentState!.validate()) {
-                // TODO : 토큰 확인 후 로그인 하기
-                if(await login(email.text, password.text) == true){
+                if(await login(email.text, password.text, _formKey) == true){
                   // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
                   // 로그인화면 스택에서 제거하고 이동해야됩니다!!
                   Navigator.pushAndRemoveUntil(
@@ -272,14 +336,5 @@ class _LogInState extends State<LogIn> {
               }
             })
     );
-  }
-
-  void showSnackBar(BuildContext context, Text text) {
-    final snackBar = SnackBar(
-      content: text,
-      backgroundColor: Color.fromARGB(255, 112, 48, 48),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

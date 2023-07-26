@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity
       ),
-      home: MainMenu(),
+      home: LogIn(),
     );
   }
 }
