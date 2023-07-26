@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus();
+          FocusManager.instance.primaryFocus?.unfocus();
         },
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(30, 200, 30, 0),

@@ -66,15 +66,12 @@ class _LogInState extends State<LogIn> {
             options: Options(contentType: Headers.jsonContentType)
           );
 
-          print(response.statusCode);
-
           if(response.statusCode == 200){
-            final accesstoken = json.decode(response.data['accessToken'].toString());
-            final refreshtoken = json.decode(response.data['refreshToken'].toString());
+            final accesstoken = response.data['accessToken'].toString();
+            final refreshtoken = response.data['refreshToken'].toString();
 
-            var value = jsonEncode(Login('$accountName', '$password', '$accesstoken', '$refreshtoken'));
-
-            await storage.write(key: 'login', value: value,);
+            var value = await jsonEncode(Login('$accountName', '$password', '$accesstoken', '$refreshtoken'));
+            await storage.write(key: 'login', value: value);
 
             final msg = "로그인에 성공하였습니다.";
             Fluttertoast.showToast(msg: msg);
@@ -86,19 +83,27 @@ class _LogInState extends State<LogIn> {
           return false;
       }
       on DioError catch(e){
+          print(e);
           if(e.type == DioErrorType.connectTimeout){
             final msg = "서버에 문제가 생겨 로그인에 실패했습니다";
             Fluttertoast.showToast(msg: msg);
           }
-          if(e.response?.statusCode == 302){
+          if(e.response?.statusCode == 302 || e.response?.statusCode == 400){
             error = true;
             formKey.currentState!.validate();
             error = false;
             final msg = "아이디 또는 비밀번호가 일치하지 않습니다";
             Fluttertoast.showToast(msg: msg);
           }
+          else{
+            final msg = "로그인에 실패하였습니다.";
+            Fluttertoast.showToast(msg: msg);
+          }
+
+          return false;
       }
       catch(e){
+          print(e);
           final msg = "로그인에 실패하였습니다.";
           Fluttertoast.showToast(msg: msg);
           return false;
@@ -146,7 +151,7 @@ class _LogInState extends State<LogIn> {
       ),
       body: GestureDetector(
           onTap: () {
-            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
           },
           child:SingleChildScrollView(
             physics: ClampingScrollPhysics(),
@@ -292,7 +297,7 @@ class _LogInState extends State<LogIn> {
       keyboardType: TextInputType.text,
       validator: (value){
         if(value == null || value.isEmpty){
-          return "이메일을 입력해주세요.";
+          return "비밀번호를 입력해주세요.";
         }
         else if(error){
           return "아이디 또는 비밀번호가 잘못되었습니다.";
@@ -332,6 +337,10 @@ class _LogInState extends State<LogIn> {
                     MaterialPageRoute(builder: (context) => MainMenu()),
                         (route) => false,
                   );
+                }
+                else if(error){
+                  _formKey.currentState!.validate();
+                  error = false;
                 }
               }
             })
