@@ -145,7 +145,7 @@ class _LogInState extends State<LogIn> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text('로그인'),
+          title: Text('로그인 화면'),
           backgroundColor: Colors.blueAccent,
           centerTitle: true
       ),
