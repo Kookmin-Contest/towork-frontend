@@ -194,7 +194,7 @@ class _LogInState extends State<LogIn> {
                         _EmailLoginButton(_formKey),
                         Text('or'),
                         SignInButton(
-                          Buttons.Google,
+                          Buttons.Facebook,
                           onPressed: () async {
                             goggleSocialLogin();
                           },
