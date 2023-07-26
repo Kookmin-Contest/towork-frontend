@@ -35,6 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: GestureDetector(
         onTap: () {
+          //반드시 이거 쓸것
           FocusManager.instance.primaryFocus?.unfocus();
         },
         child: SingleChildScrollView(
