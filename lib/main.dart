@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gotowork/screens/login_menu.dart';
 import 'package:gotowork/shared/menu_main.dart';
 
 void main() {
@@ -13,11 +12,10 @@ class MyApp extends StatelessWidget {
       title: 'Main',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-        brightness: Brightness.light,
-        visualDensity: VisualDensity.adaptivePlatformDensity
-      ),
-      home: LogIn(),
+          primarySwatch: Colors.blueGrey,
+          brightness: Brightness.light,
+          visualDensity: VisualDensity.adaptivePlatformDensity),
+      home: MainMenu(),
     );
   }
 }
