@@ -5,7 +5,6 @@ import 'package:gotowork/widgets/calendar.dart';
 
 class HomeMenu extends StatefulWidget {
   const HomeMenu({super.key});
-
   @override
   State<HomeMenu> createState() => _HomeMenuState();
 }
@@ -28,14 +27,13 @@ class _HomeMenuState extends State<HomeMenu> {
                     await storage.delete(key: 'login');
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => LogIn(),
-                      ),
+                      MaterialPageRoute(builder: (context) => LogIn()),
                       (route) => false,
                     );
                   },
                   child: Text('임시 로그아웃 버튼'),
                 ),
+                SizedBox(height: 40.0),
                 Calendar(),
               ],
             ),

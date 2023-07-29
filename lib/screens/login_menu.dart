@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/models/login_model.dart';
+import 'package:gotowork/models/token_model.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/screens/register_menu.dart';
 import 'package:dio/dio.dart';
@@ -20,9 +21,10 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  dynamic userinfo = "";
+  dynamic userinfo = null;
   bool error = false;
   static final storage = FlutterSecureStorage();
+  static final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -38,13 +40,17 @@ class _LogInState extends State<LogIn> {
     userinfo = await storage.read(key: 'login');
 
     if (userinfo != null) {
-      final msg = "로그인에 성공하였습니다!";
-      Fluttertoast.showToast(msg: msg);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => MainMenu()),
-        (route) => false,
-      );
+      dynamic data = jsonDecode(userinfo);
+      if (await login(data['email'], data['password'], _formKey) == true) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainMenu()),
+          (route) => false,
+        );
+      } else {
+        final msg = "자동 로그인에 실패했습니다. 다시 로그인해주세요";
+        Fluttertoast.showToast(msg: msg);
+      }
     } else {
       final msg = "로그인을 해주세요";
       Fluttertoast.showToast(msg: msg);
@@ -52,7 +58,7 @@ class _LogInState extends State<LogIn> {
   }
 
   // 일반적인 이메일 로그인 방식
-  login(accountName, password, formKey) async {
+  Future<bool> login(accountName, password, dynamic formKey) async {
     try {
       var dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000));
 
@@ -65,9 +71,11 @@ class _LogInState extends State<LogIn> {
         final accesstoken = response.data['accessToken'];
         final refreshtoken = response.data['refreshToken'];
 
-        var value = await jsonEncode(Login(
-            '$accountName', '$password', '$accesstoken', '$refreshtoken'));
-        await storage.write(key: 'login', value: value);
+        var login = await jsonEncode(Login('$accountName', '$password'));
+        await storage.write(key: 'login', value: login);
+
+        var token = await jsonEncode(Token(accesstoken, refreshtoken));
+        await storage.write(key: 'token', value: token);
 
         final msg = "로그인에 성공하였습니다.";
         Fluttertoast.showToast(msg: msg);
@@ -79,12 +87,13 @@ class _LogInState extends State<LogIn> {
       return false;
     } on DioError catch (e) {
       print(e);
-      if (e.type == DioErrorType.connectTimeout ||
+      if (userinfo != null) {
+        userinfo = null;
+      } else if (e.type == DioErrorType.connectTimeout ||
           e.type == DioErrorType.receiveTimeout) {
         final msg = "서버에 문제가 생겨 로그인에 실패했습니다";
         Fluttertoast.showToast(msg: msg);
-      }
-      if (e.response?.statusCode == 400) {
+      } else if (e.response?.statusCode == 400) {
         error = true;
         formKey.currentState!.validate();
         error = false;
@@ -137,8 +146,6 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('로그인 화면'),

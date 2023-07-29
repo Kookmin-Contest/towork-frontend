@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gotowork/screens/login_menu.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
