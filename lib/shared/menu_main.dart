@@ -4,6 +4,7 @@ import 'package:gotowork/screens/alert_menu.dart';
 import 'package:gotowork/screens/community_menu.dart';
 import 'package:gotowork/screens/home_menu.dart';
 import 'package:gotowork/screens/mypage_menu.dart';
+import 'package:gotowork/screens/new_workspace_screen.dart';
 import 'package:gotowork/screens/setting_menu.dart';
 import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
@@ -143,7 +144,19 @@ class _MainMenuState extends State<MainMenu> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                  )
+                  ),
+                  ListTile(
+                    title: Text('새 워크스페이스 만들기'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewWorkSpaceScreen(),
+                          fullscreenDialog: true,
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

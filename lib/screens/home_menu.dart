@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gotowork/screens/login_menu.dart';
-import 'package:gotowork/shared/menu_roundappbar.dart';
 import 'package:gotowork/widgets/calendar.dart';
 
 class HomeMenu extends StatefulWidget {
   const HomeMenu({super.key});
-
   @override
   State<HomeMenu> createState() => _HomeMenuState();
 }
@@ -21,10 +19,10 @@ class _HomeMenuState extends State<HomeMenu> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Center(
-              child: Column(
-            children: [
-              SizedBox(height: 40.0),
-              ElevatedButton(
+            child: Column(
+              children: [
+                SizedBox(height: 40.0),
+                ElevatedButton(
                   onPressed: () async {
                     await storage.delete(key: 'login');
                     Navigator.pushAndRemoveUntil(
@@ -33,10 +31,13 @@ class _HomeMenuState extends State<HomeMenu> {
                       (route) => false,
                     );
                   },
-                  child: Text('임시 로그아웃 버튼')),
-              Calendar(),
-            ],
-          )),
+                  child: Text('임시 로그아웃 버튼'),
+                ),
+                SizedBox(height: 40.0),
+                Calendar(),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gotowork/screens/login_menu.dart';
-import 'package:gotowork/shared/menu_main.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,9 +13,11 @@ class MyApp extends StatelessWidget {
       title: 'Main',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          brightness: Brightness.light,
-          visualDensity: VisualDensity.adaptivePlatformDensity),
+        fontFamily: 'NotoSansKr',
+        primarySwatch: Colors.blueGrey,
+        brightness: Brightness.light,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       home: LogIn(),
     );
   }

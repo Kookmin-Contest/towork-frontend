@@ -2,7 +2,7 @@ name: gotowork
 description: 오늘의 출근 프로젝트
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.5 <4.0.0'
+  sdk: ">=3.0.5 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -45,9 +44,9 @@ dependencies:
   drift: ^2.3.0
   dio: ^4.0.6
   dart_jsonwebtoken: ^2.8.2
-  flutter_web_auth : ^0.5.0
+  flutter_web_auth: ^0.5.0
   uuid: ^3.0.4
-
+  google_fonts: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -60,20 +59,18 @@ dev_dependencies:
   # rules and activating additional ones.
 #  flutter_lints: ^2.0.0
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   assets:
-     - assets/
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -87,22 +84,52 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: SUITE
-       fonts:
-         - asset: assets/font/SUITE/SUITE-Bold.ttf
-           weight: 200
-         - asset: assets/font/SUITE/SUITE-ExtraBold.ttf
-           weight: 300
-         - asset: assets/font/SUITE/SUITE-Heavy.ttf
-           weight: 400
-         - asset: assets/font/SUITE/SUITE-Light.ttf
-           weight: 500
-         - asset: assets/font/SUITE/SUITE-Medium.ttf
-           weight: 600
-         - asset: assets/font/SUITE/SUITE-Regular.ttf
-           weight: 700
-         - asset: assets/font/SUITE/SUITE-SemiBold.ttf
-           weight: 900
+    - family: SUITE
+      fonts:
+        - asset: assets/font/SUITE/SUITE-Bold.ttf
+          weight: 200
+        - asset: assets/font/SUITE/SUITE-ExtraBold.ttf
+          weight: 300
+        - asset: assets/font/SUITE/SUITE-Heavy.ttf
+          weight: 400
+        - asset: assets/font/SUITE/SUITE-Light.ttf
+          weight: 500
+        - asset: assets/font/SUITE/SUITE-Medium.ttf
+          weight: 600
+        - asset: assets/font/SUITE/SUITE-Regular.ttf
+          weight: 700
+        - asset: assets/font/SUITE/SUITE-SemiBold.ttf
+          weight: 900
+
+    - family: NotoSansKr
+      fonts:
+        - asset: assets/font/NotoSansKr/NotoSansKr-Thin.otf
+          weight: 100
+        - asset: assets/font/NotoSansKr/NotoSansKr-Light.otf
+          weight: 300
+        - asset: assets/font/NotoSansKr/NotoSansKr-Regular.otf
+          weight: 400
+        - asset: assets/font/NotoSansKr/NotoSansKr-Medium.otf
+          weight: 500
+        - asset: assets/font/NotoSansKr/NotoSansKr-Bold.otf
+          weight: 700
+        - asset: assets/font/NotoSansKr/NotoSansKr-Black.otf
+          weight: 900
+
+    - family: Roboto
+      fonts:
+        - asset: assets/font/NotoSansKr/Roboto-Thin.otf
+          weight: 100
+        - asset: assets/font/NotoSansKr/Roboto-Light.otf
+          weight: 300
+        - asset: assets/font/NotoSansKr/Roboto-Regular.otf
+          weight: 400
+        - asset: assets/font/NotoSansKr/Roboto-Medium.otf
+          weight: 500
+        - asset: assets/font/NotoSansKr/Roboto-Bold.otf
+          weight: 700
+        - asset: assets/font/NotoSansKr/Roboto-Black.otf
+          weight: 900
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
