@@ -14,9 +14,11 @@ class MyApp extends StatelessWidget {
       title: 'Main',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          brightness: Brightness.light,
-          visualDensity: VisualDensity.adaptivePlatformDensity),
+        fontFamily: 'NotoSansKr',
+        primarySwatch: Colors.blueGrey,
+        brightness: Brightness.light,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       home: LogIn(),
     );
   }

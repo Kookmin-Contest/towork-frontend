@@ -126,7 +126,9 @@ class _LogInState extends State<LogIn> {
 
     try {
       final result = await FlutterWebAuth.authenticate(
-          url: url.toString(), callbackUrlScheme: "webauthcallback");
+        url: url.toString(),
+        callbackUrlScheme: "webauthcallback",
+      );
       final body = Uri.parse(result).queryParameters;
     } catch (e) {
       print(e);
@@ -258,10 +260,14 @@ class _LogInState extends State<LogIn> {
     return TextFormField(
       controller: email,
       decoration: InputDecoration(
-          hintText: '이메일을 입력해주세요',
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              borderSide: BorderSide(color: Colors.grey))),
+        hintText: '이메일을 입력해주세요',
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+      ),
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "이메일을 입력해주세요.";
@@ -278,10 +284,14 @@ class _LogInState extends State<LogIn> {
     return TextFormField(
       controller: password,
       decoration: InputDecoration(
-          hintText: '비밀번호를 입력해주세요',
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              borderSide: BorderSide(color: Colors.grey))),
+        hintText: '비밀번호를 입력해주세요',
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+          borderSide: BorderSide(color: Colors.grey),
+        ),
+      ),
       keyboardType: TextInputType.text,
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -297,38 +307,40 @@ class _LogInState extends State<LogIn> {
 
   Widget _EmailLoginButton(_formKey) {
     return ButtonTheme(
-        minWidth: 10,
-        height: 50.0,
-        child: ElevatedButton(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.email,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Text('이메일로 로그인 하기')
-              ],
+      minWidth: 10,
+      height: 50.0,
+      child: ElevatedButton(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.email,
+              color: Colors.white,
+              size: 30.0,
             ),
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                if (await login(email.text, password.text, _formKey) == true) {
-                  // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
-                  // 로그인화면 스택에서 제거하고 이동해야됩니다!!
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainMenu()),
-                    (route) => false,
-                  );
-                } else if (error) {
-                  _formKey.currentState!.validate();
-                  error = false;
-                }
-              }
-            }));
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('이메일로 로그인 하기')
+          ],
+        ),
+        onPressed: () async {
+          if (_formKey.currentState!.validate()) {
+            if (await login(email.text, password.text, _formKey) == true) {
+              // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
+              // 로그인화면 스택에서 제거하고 이동해야됩니다!!
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => MainMenu()),
+                (route) => false,
+              );
+            } else if (error) {
+              _formKey.currentState!.validate();
+              error = false;
+            }
+          }
+        },
+      ),
+    );
   }
 }
