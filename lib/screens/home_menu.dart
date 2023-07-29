@@ -23,18 +23,22 @@ class _HomeMenuState extends State<HomeMenu> {
             child: Column(
               children: [
                 SizedBox(height: 40.0),
-                ElevatedButton(onPressed: () async{
+                ElevatedButton(
+                  onPressed: () async {
                     await storage.delete(key: 'login');
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => LogIn()),
-                          (route) => false,
+                      MaterialPageRoute(
+                        builder: (context) => LogIn(),
+                      ),
+                      (route) => false,
                     );
-                }, child: Text('임시 로그아웃 버튼')
+                  },
+                  child: Text('임시 로그아웃 버튼'),
                 ),
                 Calendar(),
               ],
-            )
+            ),
           ),
         ),
       ),
