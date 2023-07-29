@@ -5,9 +5,8 @@ import 'package:gotowork/screens/community_menu.dart';
 import 'package:gotowork/screens/home_menu.dart';
 import 'package:gotowork/screens/mypage_menu.dart';
 import 'package:gotowork/screens/setting_menu.dart';
-import 'dart:async';
-
 import 'package:gotowork/shared/menu_appbar.dart';
+import 'package:gotowork/shared/menu_roundappbar.dart';
 
 class Main extends StatelessWidget {
   @override
@@ -38,11 +37,6 @@ class NavigationRoute {
       required this.appbar});
 }
 
-final test = AppBar(
-    title: Text('테스트 앱바'),
-    backgroundColor: Colors.blueAccent,
-    centerTitle: true);
-
 // 하단 메뉴바 Items들
 // 표시할 라벨, 아이콘, 이동할 페이지, 앱바 순으로 넣어주시면 됩니다
 final List<NavigationRoute> _routes = [
@@ -50,12 +44,12 @@ final List<NavigationRoute> _routes = [
       name: "커뮤니티",
       icon: Icon(Icons.chat_bubble),
       page: CommunityMenu(),
-      appbar: test),
+      appbar: PlainAppbar()),
   new NavigationRoute(
       name: "마이페이지",
       icon: Icon(Icons.perm_identity_rounded),
       page: MypageMenu(),
-      appbar: test),
+      appbar: PlainAppbar()),
   new NavigationRoute(
       name: "홈",
       icon: Icon(Icons.home),
@@ -65,12 +59,12 @@ final List<NavigationRoute> _routes = [
       name: "요청",
       icon: Icon(Icons.document_scanner_outlined),
       page: AlertMenu(),
-      appbar: test),
+      appbar: PlainAppbar()),
   new NavigationRoute(
       name: "환경설정",
       icon: Icon(Icons.settings),
       page: SettingMenu(),
-      appbar: test)
+      appbar: null)
 ];
 
 class MainMenu extends StatefulWidget {
@@ -85,7 +79,7 @@ class _MainMenuState extends State<MainMenu> {
   final PageController _pageController = PageController();
   int _currentIndex = 2;
   late DateTime _lastPressed;
-  dynamic indexedAppBar = RoundAppBar();
+  dynamic _indexedAppBar = RoundAppBar();
 
   @override
   void dispose() {
@@ -109,7 +103,7 @@ class _MainMenuState extends State<MainMenu> {
         },
         child: Scaffold(
             key: _scaffoldKey,
-            appBar: indexedAppBar,
+            appBar: _indexedAppBar,
             body: IndexedStack(
               index: _currentIndex,
               children: _routes.map((route) => route.page).toList(),
@@ -168,7 +162,7 @@ class _MainMenuState extends State<MainMenu> {
     if (_currentIndex == index) return;
     setState(() {
       _currentIndex = index;
-      indexedAppBar = _routes[index].appbar;
+      _indexedAppBar = _routes[index].appbar;
     });
   }
 }

@@ -1,21 +1,12 @@
 class Login {
-  final String _username;
+  final String _email;
   final String _password;
-  final String _accesstoken;
-  final String _refreshtoken;
 
-  Login(this._username, this._password, this._accesstoken, this._refreshtoken);
+  Login(this._email, this._password);
 
   Login.fromJson(Map<String, dynamic> json)
-      : _username = json['username'],
-        _password = json['password'],
-        _accesstoken = json['accesstoken'],
-        _refreshtoken = json['refreshtoken'];
+      : _email = json['email'],
+        _password = json['password'];
 
-  Map<String, dynamic> toJson() => {
-    'username': _username,
-    'password': _password,
-    'accesstoken': _accesstoken,
-    'refreshtoken' : _refreshtoken
-  };
+  Map<String, dynamic> toJson() => {'email': _email, 'password': _password};
 }
