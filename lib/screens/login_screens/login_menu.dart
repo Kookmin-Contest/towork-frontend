@@ -3,8 +3,9 @@ import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/models/token_model.dart';
+import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/shared/menu_main.dart';
-import 'package:gotowork/screens/register_menu.dart';
+import 'package:gotowork/screens/signup_screens/signup_menu.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
@@ -147,7 +148,8 @@ class _LogInState extends State<LogIn> {
     return Scaffold(
         appBar: AppBar(
             title: Text('로그인 화면'),
-            backgroundColor: Colors.blueAccent,
+            backgroundColor: const Color(0xff60adda),
+            elevation: 3.0,
             centerTitle: true),
         body: GestureDetector(
           onTap: () {
@@ -237,7 +239,8 @@ class _LogInState extends State<LogIn> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Register()));
+                                          builder: (context) =>
+                                              SignupChoose()));
                                 },
                               )),
                         ],

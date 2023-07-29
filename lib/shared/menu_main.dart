@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gotowork/screens/alert_menu.dart';
-import 'package:gotowork/screens/community_menu.dart';
-import 'package:gotowork/screens/home_menu.dart';
-import 'package:gotowork/screens/mypage_menu.dart';
-import 'package:gotowork/screens/setting_menu.dart';
+import 'package:gotowork/screens/main_screens/alert_menu.dart';
+import 'package:gotowork/screens/main_screens/community_menu.dart';
+import 'package:gotowork/screens/main_screens/home_menu.dart';
+import 'package:gotowork/screens/main_screens/mypage_menu.dart';
+import 'package:gotowork/screens/main_screens/setting_menu.dart';
 import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
 
