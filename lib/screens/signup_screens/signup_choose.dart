@@ -36,27 +36,29 @@ class SignupChoose extends StatelessWidget {
               Container(
                 width: 300.0,
                 child: ElevatedButton(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          Icons.email,
-                          color: Colors.white,
-                          size: 30.0,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text('이메일로 가입하기')
-                      ],
-                    ),
-                    onPressed: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Register(),
-                          ));
-                    }),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.email,
+                        color: Colors.white,
+                        size: 30.0,
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Text('이메일로 가입하기')
+                    ],
+                  ),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Register(),
+                      ),
+                    );
+                  },
+                ),
               ),
               SizedBox(
                 height: 10.0,

@@ -11,10 +11,11 @@ class Register extends StatelessWidget {
       title: '회원가입 예제',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Colors.blue,
-          brightness: Brightness.light,
-          fontFamily: 'SUITE',
-          visualDensity: VisualDensity.adaptivePlatformDensity),
+        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        fontFamily: 'SUITE',
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       home: RegisterPage(),
     );
   }

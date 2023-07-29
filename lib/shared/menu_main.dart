@@ -91,84 +91,91 @@ class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async {
-          final now = DateTime.now();
-          if (now.difference(_lastPressed) > Duration(seconds: 2)) {
-            _lastPressed = now;
-            final msg = "뒤로가기 버튼을 한 번 더 누르면 종료됩니다";
+      onWillPop: () async {
+        final now = DateTime.now();
+        if (now.difference(_lastPressed) > Duration(seconds: 2)) {
+          _lastPressed = now;
+          final msg = "뒤로가기 버튼을 한 번 더 누르면 종료됩니다";
 
-            Fluttertoast.showToast(msg: msg);
-            return false;
-          }
-          return true;
-        },
-        child: Scaffold(
-            key: _scaffoldKey,
-            appBar: _indexedAppBar,
-            body: IndexedStack(
-              index: _currentIndex,
-              children: _routes.map((route) => route.page).toList(),
-            ),
-            drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  UserAccountsDrawerHeader(
-                    accountEmail: Text("mclub4@kookmin.ac.kr"),
-                    accountName: Text("조현진님 반갑습니다!"),
-                    currentAccountPicture: CircleAvatar(
-                      backgroundImage: AssetImage("assets/logo.png"),
-                      backgroundColor: Colors.white,
-                    ),
-                    onDetailsPressed: () {},
-                    decoration: BoxDecoration(
-                      color: const Color(0xff9dcff7),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
-                    child: Text(
-                      'WorkSpace',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15.0),
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('워크스페이스 1'),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('워크스페이스 2'),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('새 워크스페이스 만들기'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewWorkSpaceScreen(),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
-                  ),
-                ],
+          Fluttertoast.showToast(msg: msg);
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: _indexedAppBar,
+        body: IndexedStack(
+          index: _currentIndex,
+          children: _routes.map((route) => route.page).toList(),
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              UserAccountsDrawerHeader(
+                accountEmail: Text("mclub4@kookmin.ac.kr"),
+                accountName: Text("조현진님 반갑습니다!"),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage("assets/logo.png"),
+                  backgroundColor: Colors.white,
+                ),
+                onDetailsPressed: () {},
+                decoration: BoxDecoration(
+                  color: const Color(0xff9dcff7),
+                ),
               ),
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                currentIndex: _currentIndex,
-                selectedItemColor: Colors.blueAccent,
-                onTap: _onTap,
-                items: _routes.map((route) {
-                  return BottomNavigationBarItem(
-                      icon: route.icon, label: route.name);
-                }).toList())));
+              Container(
+                padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+                child: Text(
+                  'WorkSpace',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Text('워크스페이스 1'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('워크스페이스 2'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('새 워크스페이스 만들기'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NewWorkSpaceScreen(),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedItemColor: Colors.blueAccent,
+          onTap: _onTap,
+          items: _routes.map((route) {
+            return BottomNavigationBarItem(
+              icon: route.icon,
+              label: route.name,
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   void _onTap(int index) {

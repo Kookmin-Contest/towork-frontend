@@ -5,7 +5,6 @@ import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/models/token_model.dart';
 import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/shared/menu_main.dart';
-import 'package:gotowork/screens/signup_screens/signup_menu.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
@@ -148,112 +147,121 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text('로그인 화면'),
-            backgroundColor: const Color(0xff60adda),
-            elevation: 3.0,
-            centerTitle: true),
-        body: GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: (EdgeInsets.only(top: 30)),
+      appBar: AppBar(
+          title: Text('로그인 화면'),
+          backgroundColor: const Color(0xff60adda),
+          elevation: 3.0,
+          centerTitle: true),
+      body: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: (EdgeInsets.only(top: 30)),
+              ),
+              Center(
+                child: Image(
+                  image: AssetImage('assets/logo.png'),
+                  width: 140,
+                  height: 140,
                 ),
-                Center(
-                  child: Image(
-                    image: AssetImage('assets/logo.png'),
-                    width: 140,
-                    height: 140,
-                  ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Colors.grey,
-                      inputDecorationTheme: InputDecorationTheme(
-                          labelStyle:
-                              TextStyle(color: Colors.grey, fontSize: 15.0)),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          _EmailField(),
-                          SizedBox(
-                            height: 7.0,
-                          ),
-                          _PasswordField(),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          _EmailLoginButton(_formKey),
-                          Text('or'),
-                          SignInButton(
-                            Buttons.Facebook,
-                            onPressed: () async {
-                              goggleSocialLogin();
-                            },
-                          ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          Divider(
-                            height: 10.0,
-                            color: Colors.grey,
-                            thickness: 0.8,
-                          ),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          SizedBox(
-                              width: 200.0,
-                              height: 40.0,
-                              child: TextButton(
-                                child: Text(
-                                  "아이디/비밀번호 찾기",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () {
-                                  //TODO : 아이디/비밀번호 찾기 연결하기
-                                },
-                              )),
-                          SizedBox(
-                              width: 80.0,
-                              height: 40.0,
-                              child: TextButton(
-                                child: Text(
-                                  "회원 가입",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SignupChoose()));
-                                },
-                              )),
-                        ],
+              ),
+              Form(
+                key: _formKey,
+                child: Theme(
+                  data: ThemeData(
+                    primaryColor: Colors.grey,
+                    inputDecorationTheme: InputDecorationTheme(
+                      labelStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15.0,
                       ),
                     ),
                   ),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        _EmailField(),
+                        SizedBox(
+                          height: 7.0,
+                        ),
+                        _PasswordField(),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        _EmailLoginButton(_formKey),
+                        Text('or'),
+                        SignInButton(
+                          Buttons.Facebook,
+                          onPressed: () async {
+                            goggleSocialLogin();
+                          },
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Divider(
+                          height: 10.0,
+                          color: Colors.grey,
+                          thickness: 0.8,
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        SizedBox(
+                          width: 200.0,
+                          height: 40.0,
+                          child: TextButton(
+                            child: Text(
+                              "아이디/비밀번호 찾기",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () {
+                              //TODO : 아이디/비밀번호 찾기 연결하기
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 80.0,
+                          height: 40.0,
+                          child: TextButton(
+                            child: Text(
+                              "회원 가입",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignupChoose(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _EmailField() {
