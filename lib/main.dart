@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gotowork/screens/login_menu.dart';
 import 'package:gotowork/shared/menu_main.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blueGrey,
           brightness: Brightness.light,
           visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: MainMenu(),
+      home: LogIn(),
     );
   }
 }
