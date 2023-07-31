@@ -195,81 +195,88 @@ class _LogInState extends State<LogIn> {
                         ),
                       ),
                     ),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          _EmailField(),
-                          SizedBox(
-                            height: 7.0,
-                          ),
-                          _PasswordField(),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          _EmailLoginButton(_formKey),
-                          Text('or'),
-                          SignInButton(
-                            Buttons.Facebook,
-                            onPressed: () async {
-                              goggleSocialLogin();
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        _EmailField(),
+                        SizedBox(
+                          height: 7.0,
+                        ),
+                        _PasswordField(),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        _EmailLoginButton(_formKey),
+                        Text('or'),
+                        SignInButton(
+                          Buttons.Facebook,
+                          onPressed: () async {
+                            goggleSocialLogin();
+                          },
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Divider(
+                          height: 10.0,
+                          color: Colors.grey,
+                          thickness: 0.8,
+                        ),
+                        SizedBox(
+                          height: 30.0,
+                        ),
+                        SizedBox(
+                          width: 200.0,
+                          height: 40.0,
+                          child: TextButton(
+                            child: Text(
+                              "아이디/비밀번호 찾기",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () {
+                              //TODO : 아이디/비밀번호 찾기 연결하기
                             },
                           ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          Divider(
-                            height: 10.0,
-                            color: Colors.grey,
-                            thickness: 0.8,
-                          ),
-                          SizedBox(
-                            height: 30.0,
-                          ),
-                          SizedBox(
-                              width: 200.0,
-                              height: 40.0,
-                              child: TextButton(
-                                child: Text(
-                                  "아이디/비밀번호 찾기",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          width: 80.0,
+                          height: 40.0,
+                          child: TextButton(
+                            child: Text(
+                              "회원 가입",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignupChoose(),
                                 ),
-                                onPressed: () {
-                                  //TODO : 아이디/비밀번호 찾기 연결하기
-                                },
-                              )),
-                          SizedBox(
-                              width: 80.0,
-                              height: 40.0,
-                              child: TextButton(
-                                child: Text(
-                                  "회원 가입",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              SignupChoose()));
-                                },
-                              )),
-                        ],
-                      ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _EmailField() {
