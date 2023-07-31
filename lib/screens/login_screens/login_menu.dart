@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +32,14 @@ class _LogInState extends State<LogIn> {
   @override
   void initState() {
     super.initState();
+
+    if (Platform.isAndroid) {
+      _base = 'http://10.0.2.2:8080';
+    } else if (Platform.isIOS) {
+      _base = 'http://127.0.0.1:8080';
+    } else {
+      _base = "http://localhost:8080";
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
@@ -65,7 +75,7 @@ class _LogInState extends State<LogIn> {
 
       var param =
           jsonEncode({'email': '$accountName', 'password': '$password'});
-      Response response = await dio.post('http://10.0.2.2:8080/auth/login',
+      Response response = await dio.post(_base + '/auth/login',
           data: param, options: Options(contentType: Headers.jsonContentType));
 
       if (response.statusCode == 200) {
@@ -116,17 +126,9 @@ class _LogInState extends State<LogIn> {
 
   //api로 로그인했을때 접속 코드입니다. 현재 오류가 있어서 안쓰일 수도 있습니다.
   void goggleSocialLogin() async {
-    final clientState = Uuid().v4();
-    final url = Uri.http('10.0.2.2:8080', '/oauth2/authorization/goggle?', {
-      'response_type': 'code',
-      'client_id': '이곳은 구글에서 설정한 REST API KEY를 넣어준다.',
-      'redirect_uri': 'http://10.0.2.2:8080/auth/social-login',
-      'state': clientState,
-    });
-
     try {
       final result = await FlutterWebAuth.authenticate(
-        url: _base + '/oauth2/social-login/google',
+        url: _base + '/oauth2/social-login/kakao',
         callbackUrlScheme: "gotowork",
       );
       print(result);
@@ -161,38 +163,37 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text('로그인 화면'),
-            backgroundColor: const Color(0xff60adda),
-            elevation: 3.0,
-            centerTitle: true),
-        body: GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: (EdgeInsets.only(top: 30)),
+      appBar: AppBar(
+          title: Text('로그인 화면'),
+          backgroundColor: const Color(0xff60adda),
+          elevation: 3.0,
+          centerTitle: true),
+      body: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: (EdgeInsets.only(top: 30)),
+              ),
+              Center(
+                child: Image(
+                  image: AssetImage('assets/logo.png'),
+                  width: 140,
+                  height: 140,
                 ),
-                Center(
-                  child: Image(
-                    image: AssetImage('assets/logo.png'),
-                    width: 140,
-                    height: 140,
-                  ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Colors.grey,
-                      inputDecorationTheme: InputDecorationTheme(
-                        labelStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 15.0,
-                        ),
+              ),
+              Form(
+                key: _formKey,
+                child: Theme(
+                  data: ThemeData(
+                    primaryColor: Colors.grey,
+                    inputDecorationTheme: InputDecorationTheme(
+                      labelStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15.0,
                       ),
                     ),
                   ),
