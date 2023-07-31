@@ -51,11 +51,7 @@ class SignupChoose extends StatelessWidget {
                       ],
                     ),
                     onPressed: () async {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Register(),
-                          ));
+                      Navigator.pushNamed(context, '/signup');
                     }),
               ),
               SizedBox(
