@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/models/token_model.dart';
 import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/shared/menu_main.dart';
-import 'package:gotowork/screens/signup_screens/signup_menu.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
@@ -34,14 +30,6 @@ class _LogInState extends State<LogIn> {
   @override
   void initState() {
     super.initState();
-
-    if (Platform.isAndroid) {
-      _base = 'http://10.0.2.2:8080';
-    } else if (Platform.isIOS) {
-      _base = 'http://127.0.0.1:8080';
-    } else {
-      _base = 'http://localhost:8080';
-    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
@@ -77,8 +65,7 @@ class _LogInState extends State<LogIn> {
 
       var param =
           jsonEncode({'email': '$accountName', 'password': '$password'});
-
-      Response response = await dio.post(_base + '/auth/login',
+      Response response = await dio.post('http://10.0.2.2:8080/auth/login',
           data: param, options: Options(contentType: Headers.jsonContentType));
 
       if (response.statusCode == 200) {
@@ -127,7 +114,16 @@ class _LogInState extends State<LogIn> {
     }
   }
 
+  //api로 로그인했을때 접속 코드입니다. 현재 오류가 있어서 안쓰일 수도 있습니다.
   void goggleSocialLogin() async {
+    final clientState = Uuid().v4();
+    final url = Uri.http('10.0.2.2:8080', '/oauth2/authorization/goggle?', {
+      'response_type': 'code',
+      'client_id': '이곳은 구글에서 설정한 REST API KEY를 넣어준다.',
+      'redirect_uri': 'http://10.0.2.2:8080/auth/social-login',
+      'state': clientState,
+    });
+
     try {
       final result = await FlutterWebAuth.authenticate(
         url: _base + '/oauth2/social-login/google',
@@ -193,8 +189,11 @@ class _LogInState extends State<LogIn> {
                     data: ThemeData(
                       primaryColor: Colors.grey,
                       inputDecorationTheme: InputDecorationTheme(
-                          labelStyle:
-                              TextStyle(color: Colors.grey, fontSize: 15.0)),
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15.0,
+                        ),
+                      ),
                     ),
                     child: Container(
                       padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
@@ -255,7 +254,11 @@ class _LogInState extends State<LogIn> {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/signupchoose');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SignupChoose()));
                                 },
                               )),
                         ],

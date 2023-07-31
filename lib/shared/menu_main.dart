@@ -68,7 +68,6 @@ final List<NavigationRoute> _routes = [
       page: SettingMenu(),
       appbar: null)
 ];
-const double INIT_POSITION = 1.0;
 
 class MainMenu extends StatefulWidget {
   const MainMenu({super.key});
@@ -84,6 +83,7 @@ class _MainMenuState extends State<MainMenu>
   final Duration duration = const Duration(milliseconds: 500);
   double _position = 1.0;
   int _currentIndex = 2;
+  late DateTime _lastPressed;
   dynamic _indexedAppBar = RoundAppBar();
 
   @override

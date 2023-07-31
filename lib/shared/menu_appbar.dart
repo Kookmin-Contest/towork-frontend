@@ -13,7 +13,10 @@ class PlainAppbar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 3.0,
       centerTitle: true,
       actions: <Widget>[
-        IconButton(icon: Icon(Icons.add_alert), onPressed: () {})
+        IconButton(
+          icon: Icon(Icons.add_alert),
+          onPressed: () {},
+        )
       ],
     );
   }
