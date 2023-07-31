@@ -8,22 +8,23 @@ import 'package:gotowork/screens/main_screens/setting_menu.dart';
 import 'package:gotowork/screens/new_workspace_screen.dart';
 import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
+import 'package:gotowork/widgets/animatedIndexedStack.dart';
 
-class Main extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '메인 메뉴',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          brightness: Brightness.light,
-          fontFamily: 'SUITE',
-          visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: MainMenu(),
-    );
-  }
-}
+// class Main extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: '메인 메뉴',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//           primarySwatch: Colors.blue,
+//           brightness: Brightness.light,
+//           fontFamily: 'SUITE',
+//           visualDensity: VisualDensity.adaptivePlatformDensity),
+//       home: MainMenu(),
+//     );
+//   }
+// }
 
 class NavigationRoute {
   final String name;
@@ -75,7 +76,8 @@ class MainMenu extends StatefulWidget {
   State<MainMenu> createState() => _MainMenuState();
 }
 
-class _MainMenuState extends State<MainMenu> {
+class _MainMenuState extends State<MainMenu>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   final PageController _pageController = PageController();
   int _currentIndex = 2;
@@ -90,90 +92,71 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        final now = DateTime.now();
-        if (now.difference(_lastPressed) > Duration(seconds: 2)) {
-          _lastPressed = now;
-          final msg = "뒤로가기 버튼을 한 번 더 누르면 종료됩니다";
-
-          Fluttertoast.showToast(msg: msg);
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: _indexedAppBar,
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _routes.map((route) => route.page).toList(),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              UserAccountsDrawerHeader(
-                accountEmail: Text("mclub4@kookmin.ac.kr"),
-                accountName: Text("조현진님 반갑습니다!"),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage("assets/logo.png"),
-                  backgroundColor: Colors.white,
-                ),
-                onDetailsPressed: () {},
-                decoration: BoxDecoration(
-                  color: const Color(0xff9dcff7),
-                ),
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: _indexedAppBar,
+      body: AnimatedIndexedStack(
+        index: _currentIndex,
+        children: _routes.map((route) => route.page).toList(),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+              accountEmail: Text("mclub4@kookmin.ac.kr"),
+              accountName: Text("조현진님 반갑습니다!"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage("assets/logo.png"),
+                backgroundColor: Colors.white,
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
-                child: Text(
-                  'WorkSpace',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.0,
+              onDetailsPressed: () {},
+              decoration: BoxDecoration(
+                color: const Color(0xff9dcff7),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+              child: Text(
+                'WorkSpace',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+              ),
+            ),
+            ListTile(
+              title: Text('워크스페이스 1'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('워크스페이스 2'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('새 워크스페이스 만들기'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewWorkSpaceScreen(),
+                    fullscreenDialog: true,
                   ),
-                ),
-              ),
-              ListTile(
-                title: Text('워크스페이스 1'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('워크스페이스 2'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('새 워크스페이스 만들기'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewWorkSpaceScreen(),
-                      fullscreenDialog: true,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+                );
+              },
+            ),
+          ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          selectedItemColor: Colors.blueAccent,
-          onTap: _onTap,
-          items: _routes.map((route) {
-            return BottomNavigationBarItem(
-              icon: route.icon,
-              label: route.name,
-            );
-          }).toList(),
-        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.blueAccent,
+        onTap: _onTap,
+        items: _routes.map((route) {
+          return BottomNavigationBarItem(icon: route.icon, label: route.name);
+        }).toList(),
       ),
     );
   }

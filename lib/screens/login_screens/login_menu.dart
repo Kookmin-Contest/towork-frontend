@@ -25,6 +25,7 @@ class _LogInState extends State<LogIn> {
   bool error = false;
   static final storage = FlutterSecureStorage();
   static final _formKey = GlobalKey<FormState>();
+  static String _base = '';
 
   @override
   void initState() {
@@ -125,10 +126,23 @@ class _LogInState extends State<LogIn> {
 
     try {
       final result = await FlutterWebAuth.authenticate(
-        url: url.toString(),
-        callbackUrlScheme: "webauthcallback",
+        url: _base + '/oauth2/social-login/google',
+        callbackUrlScheme: "gotowork",
       );
-      final body = Uri.parse(result).queryParameters;
+      print(result);
+      final body = Uri.parse(result).data;
+      print(body);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void socialLoginTest() async {
+    try {
+      var dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000));
+      Response response =
+          await dio.get('http://10.0.2.2:8080/oauth2/social-login/kakao');
+      print(response);
     } catch (e) {
       print(e);
     }
@@ -147,37 +161,38 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text('로그인 화면'),
-          backgroundColor: const Color(0xff60adda),
-          elevation: 3.0,
-          centerTitle: true),
-      body: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: (EdgeInsets.only(top: 30)),
-              ),
-              Center(
-                child: Image(
-                  image: AssetImage('assets/logo.png'),
-                  width: 140,
-                  height: 140,
+        appBar: AppBar(
+            title: Text('로그인 화면'),
+            backgroundColor: const Color(0xff60adda),
+            elevation: 3.0,
+            centerTitle: true),
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: (EdgeInsets.only(top: 30)),
                 ),
-              ),
-              Form(
-                key: _formKey,
-                child: Theme(
-                  data: ThemeData(
-                    primaryColor: Colors.grey,
-                    inputDecorationTheme: InputDecorationTheme(
-                      labelStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15.0,
+                Center(
+                  child: Image(
+                    image: AssetImage('assets/logo.png'),
+                    width: 140,
+                    height: 140,
+                  ),
+                ),
+                Form(
+                  key: _formKey,
+                  child: Theme(
+                    data: ThemeData(
+                      primaryColor: Colors.grey,
+                      inputDecorationTheme: InputDecorationTheme(
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15.0,
+                        ),
                       ),
                     ),
                   ),

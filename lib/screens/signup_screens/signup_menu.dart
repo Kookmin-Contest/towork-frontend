@@ -3,6 +3,40 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+
+class UserProvider with ChangeNotifier {
+  String _email = "";
+  String _password = "";
+  String _name = "";
+  String _phoneNumber = "";
+  String _birthDate = "";
+
+  void set email(String email) {
+    this._email = email;
+    notifyListeners();
+  }
+
+  void set password(String password) {
+    this._password = password;
+    notifyListeners();
+  }
+
+  void set name(String name) {
+    this._name = name;
+    notifyListeners();
+  }
+
+  void set phoneNumber(String phoneNumber) {
+    this._phoneNumber = phoneNumber;
+    notifyListeners();
+  }
+
+  void set birthDate(String birthDate) {
+    this._birthDate = birthDate;
+    notifyListeners();
+  }
+}
 
 class Register extends StatelessWidget {
   @override
@@ -11,12 +45,14 @@ class Register extends StatelessWidget {
       title: '회원가입 예제',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        brightness: Brightness.light,
-        fontFamily: 'SUITE',
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+          primarySwatch: Colors.blue,
+          brightness: Brightness.light,
+          fontFamily: 'SUITE',
+          visualDensity: VisualDensity.adaptivePlatformDensity),
+      home: ChangeNotifierProvider(
+        create: (_) => UserProvider(),
+        child: RegisterPage(),
       ),
-      home: RegisterPage(),
     );
   }
 }
@@ -27,18 +63,24 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  late UserProvider _userProvider = Provider.of<UserProvider>(context);
+
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _error = false;
+  final _email = TextEditingController();
+  final _password = TextEditingController();
 
   // 일반적인 이메일 로그인 방식
-  register(accountName, password, formKey) async {
+  signup(accountName, password, formKey) async {
     try {
       var dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000));
 
-      var param =
-          jsonEncode({'email': '$accountName', 'password': '$password'});
+      var param = jsonEncode({
+        'email': '$accountName',
+        'password': '$password',
+        'name': '봄날산책',
+        'phoneNumber': '010-1234-5678',
+        'birthDate': '2075-01-01'
+      });
       Response response = await dio.post('http://10.0.2.2:8080/auth/signup',
           data: param, options: Options(contentType: Headers.jsonContentType));
 
@@ -62,9 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
         Fluttertoast.showToast(msg: msg);
       }
       if (e.response?.statusCode == 400) {
-        _error = true;
         formKey.currentState!.validate();
-        _error = false;
         final msg = "아이디 또는 비밀번호가 일치하지 않습니다";
         Fluttertoast.showToast(msg: msg);
       } else {
@@ -81,11 +121,27 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  void _checkEmail() async {
+    //이메일 형식 검사
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(pattern);
+
+    bool duplicate = false;
+    try {
+      //TODO : 이메일 중복검사 만들기
+    } catch (e) {
+      print(e);
+      duplicate = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('회원가입'),
+        centerTitle: true,
       ),
       body: GestureDetector(
         onTap: () {
@@ -100,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TextFormField(
-                  controller: _emailController,
+                  controller: _email,
                   decoration: InputDecoration(
                     icon: Icon(Icons.email),
                     labelText: '이메일',
@@ -113,10 +169,38 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                 ),
                 TextFormField(
-                  controller: _passwordController,
+                  controller: _password,
                   decoration: InputDecoration(
                     icon: Icon(Icons.lock),
                     labelText: '비밀번호',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '비밀번호를 입력해주세요.';
+                    }
+                    return null;
+                  },
+                  obscureText: true,
+                ),
+                TextFormField(
+                  controller: _password,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.lock),
+                    labelText: '비밀번호 확인',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '비밀번호를 다시 입력해주세요.';
+                    }
+                    return null;
+                  },
+                  obscureText: true,
+                ),
+                TextFormField(
+                  controller: _password,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.lock),
+                    labelText: '이름',
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -131,9 +215,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      //TODO : 회원가입 구현
-                    }
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    // if (_formKey.currentState!.validate()) {
+                    //   Navigator.of(context)
+                    //       .popUntil((route) => route.isFirst);
+                    // }
                   },
                   child: Text('회원가입'),
                 ),
