@@ -69,7 +69,7 @@ final List<NavigationRoute> _routes = [
       name: "환경설정",
       icon: Icon(Icons.settings),
       page: SettingMenu(),
-      appbar: null)
+      appbar: PlainAppbar())
 ];
 
 class MainMenu extends StatefulWidget {
