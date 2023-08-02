@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -9,12 +10,41 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
+  List<DateTime> holidays = [
+    DateTime(2023, 1, 1),
+    DateTime(2023, 3, 1),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return TableCalendar(
-        focusedDay: DateTime.now(),
-        firstDay: DateTime(2023,1,1),
-        lastDay: DateTime(2023,12,31),
+    return Stack(
+      children: [
+        TableCalendar(
+          focusedDay: DateTime.now(),
+          firstDay: DateTime(2023, 1, 1),
+          lastDay: DateTime(2023, 12, 31),
+          startingDayOfWeek: StartingDayOfWeek.monday,
+          headerStyle: HeaderStyle(
+            formatButtonVisible: false,
+            titleTextFormatter: (date, locale) =>
+                DateFormat('yyyy.MM').format(date),
+            leftChevronIcon: Icon(Icons.chevron_left),
+            rightChevronIcon: Icon(Icons.chevron_right),
+            headerPadding: EdgeInsets.only(right: 40),
+          ),
+          daysOfWeekStyle: DaysOfWeekStyle(
+            dowTextFormatter: (date, locale) {
+              final days = ['월', '화', '수', '목', '금', '토', '일'];
+              return days[date.weekday - 1];
+            },
+          ),
+        ),
+        Positioned(
+          top: 10,
+          right: 10,
+          child: Icon(Icons.alarm),
+        )
+      ],
     );
   }
 }
