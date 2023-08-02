@@ -76,6 +76,7 @@ class _RoundAppBarState extends State<RoundAppBar> {
 
         if (response.statusCode == 200) {
           context.read<MemberProvider>().username = response.data['name'];
+          context.read<MemberProvider>().email = response.data['email'];
         }
       } on DioError catch (e) {
         if (e.type == DioErrorType.connectTimeout ||
@@ -97,8 +98,6 @@ class _RoundAppBarState extends State<RoundAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    String name = context.watch<MemberProvider>().username;
-
     return AppBar(
       title: Text('메인 화면'),
       centerTitle: true,
@@ -130,6 +129,7 @@ class _RoundAppBarState extends State<RoundAppBar> {
                     color: Colors.white,
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
