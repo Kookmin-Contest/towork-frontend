@@ -10,6 +10,7 @@ import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
 import 'package:gotowork/widgets/animatedIndexedStack.dart';
 import 'package:provider/provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class Main extends StatelessWidget {
   @override
@@ -82,15 +83,49 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
-  final PageController _pageController = PageController();
-  int _currentIndex = 2;
+
+  // 뒤로가기 버튼 관련 변수
   late DateTime _lastPressed;
+
+  // IndexedStack 현재 상태 관련 변수
+  int _currentIndex = 2;
   dynamic _indexedAppBar = RoundAppBar();
+
+  // 인터넷 연결 확인 관련 변수들
+  var _subscription;
+  bool _hasConnection = false;
+  bool _onetime = false;
+  final snackbar = SnackBar(
+    content: const Text('인터넷 연결이 불안정합니다'),
+    action: SnackBarAction(label: '확인', onPressed: () {}),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 인터넷 연결 확인
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      if (result == ConnectivityResult.none) {
+        _hasConnection = false;
+        await Future.delayed(Duration(seconds: 1));
+        if (_hasConnection == false && _onetime == false) {
+          _onetime = true;
+          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        }
+      } else {
+        _hasConnection = true;
+        _onetime = false;
+      }
+    });
+  }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
+    _subscription.cancel();
   }
 
   @override
@@ -107,8 +142,9 @@ class _MainMenuState extends State<MainMenu>
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountEmail: Text("mclub4@kookmin.ac.kr"),
-              accountName: Text("조현진님 반갑습니다!"),
+              accountEmail: Text(context.watch<MemberProvider>().email),
+              accountName:
+                  Text(context.watch<MemberProvider>().username + "님 반갑습니다!"),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage("assets/logo.png"),
                 backgroundColor: Colors.white,
