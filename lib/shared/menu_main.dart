@@ -1,30 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gotowork/providers/member_provider.dart';
 import 'package:gotowork/screens/main_screens/alert_menu.dart';
 import 'package:gotowork/screens/main_screens/community_menu.dart';
 import 'package:gotowork/screens/main_screens/home_menu.dart';
 import 'package:gotowork/screens/main_screens/mypage_menu.dart';
 import 'package:gotowork/screens/main_screens/setting_menu.dart';
-import 'package:gotowork/screens/new_workspace_screen.dart';
+import 'package:gotowork/screens/workspace_screens/new_workspace_screen.dart';
 import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
 import 'package:gotowork/widgets/animatedIndexedStack.dart';
+import 'package:provider/provider.dart';
 
-// class Main extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: '메인 메뉴',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//           primarySwatch: Colors.blue,
-//           brightness: Brightness.light,
-//           fontFamily: 'SUITE',
-//           visualDensity: VisualDensity.adaptivePlatformDensity),
-//       home: MainMenu(),
-//     );
-//   }
-// }
+class Main extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '메인 메뉴',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          primarySwatch: Colors.blue,
+          brightness: Brightness.light,
+          fontFamily: 'NotoSansKr',
+          visualDensity: VisualDensity.adaptivePlatformDensity),
+      home: MultiProvider(providers: [
+        ChangeNotifierProvider(create: (_) => MemberProvider()),
+      ], child: MainMenu()),
+    );
+  }
+}
 
 class NavigationRoute {
   final String name;

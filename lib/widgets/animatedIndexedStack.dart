@@ -11,7 +11,7 @@ class AnimatedIndexedStack extends StatefulWidget {
     super.key,
     required this.index,
     required this.children,
-    this.duration = const Duration(milliseconds: 200),
+    this.duration = const Duration(milliseconds: 50),
   });
 
   @override
