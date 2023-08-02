@@ -1,15 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/models/token_model.dart';
 import 'package:gotowork/screens/signup_screens/signup_choose.dart';
+import 'package:gotowork/screens/webview.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
-import 'package:uuid/uuid.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
@@ -55,7 +54,7 @@ class _LogInState extends State<LogIn> {
       if (await login(data['email'], data['password'], _formKey) == true) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => MainMenu()),
+          MaterialPageRoute(builder: (context) => Main()),
           (route) => false,
         );
       } else {
@@ -75,7 +74,9 @@ class _LogInState extends State<LogIn> {
 
       var param =
           jsonEncode({'email': '$accountName', 'password': '$password'});
-      Response response = await dio.post(_base + '/auth/login',
+      String url = _base + '/auth/login';
+      print(url);
+      Response response = await dio.post(url,
           data: param, options: Options(contentType: Headers.jsonContentType));
 
       if (response.statusCode == 200) {
@@ -127,8 +128,9 @@ class _LogInState extends State<LogIn> {
   //api로 로그인했을때 접속 코드입니다. 현재 오류가 있어서 안쓰일 수도 있습니다.
   void goggleSocialLogin() async {
     try {
+      String url = _base + '/oauth2/social-login/kakao';
       final result = await FlutterWebAuth.authenticate(
-        url: _base + '/oauth2/social-login/kakao',
+        url: url,
         callbackUrlScheme: "gotowork",
       );
       print(result);
@@ -243,6 +245,11 @@ class _LogInState extends State<LogIn> {
                             ),
                             onPressed: () {
                               //TODO : 아이디/비밀번호 찾기 연결하기
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => WebViewTest(),
+                                  ));
                             },
                           ),
                         ),
@@ -355,7 +362,7 @@ class _LogInState extends State<LogIn> {
               // 로그인화면 스택에서 제거하고 이동해야됩니다!!
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => MainMenu()),
+                MaterialPageRoute(builder: (context) => Main()),
                 (route) => false,
               );
             } else if (error) {

@@ -4,6 +4,7 @@ import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/widgets/animatedIndexedStack.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/signupchoose': (BuildContext context) => SignupChoose(),
         '/signup': (BuildContext context) => Register()
       },
-      home: MainMenu(),
+      home: LogIn(),
     );
   }
 }
