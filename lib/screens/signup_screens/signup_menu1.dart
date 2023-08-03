@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NewWorkSpaceScreen extends StatelessWidget {
-  const NewWorkSpaceScreen({super.key});
+class SignupMenuFirst extends StatelessWidget {
+  const SignupMenuFirst({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class NewWorkSpaceScreen extends StatelessWidget {
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Text(
-            '회원가입',
+            '새 Workspace',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w700,

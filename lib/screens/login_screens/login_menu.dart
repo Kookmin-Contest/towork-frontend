@@ -32,13 +32,16 @@ class _LogInState extends State<LogIn> {
   void initState() {
     super.initState();
 
-    if (Platform.isAndroid) {
-      _base = 'http://10.0.2.2:8080';
-    } else if (Platform.isIOS) {
-      _base = 'http://127.0.0.1:8080';
-    } else {
-      _base = "http://localhost:8080";
-    }
+    // if (Platform.isAndroid) {
+    //   _base = 'http://10.0.2.2:8080';
+    // } else if (Platform.isIOS) {
+    //   _base = 'http://127.0.0.1:8080';
+    // } else {
+    //   _base = "http://localhost:8080";
+    // }
+
+    _base =
+        'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
@@ -144,8 +147,7 @@ class _LogInState extends State<LogIn> {
   void socialLoginTest() async {
     try {
       var dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000));
-      Response response =
-          await dio.get('http://10.0.2.2:8080/oauth2/social-login/kakao');
+      Response response = await dio.get(_base + '/oauth2/social-login/kakao');
       print(response);
     } catch (e) {
       print(e);

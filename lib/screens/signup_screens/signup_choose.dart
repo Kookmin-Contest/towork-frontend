@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu.dart';
+import 'package:gotowork/screens/signup_screens/signup_menu1.dart';
 
 class SignupChoose extends StatelessWidget {
   const SignupChoose({super.key});
@@ -54,7 +55,7 @@ class SignupChoose extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Register(),
+                        builder: (context) => SignupMenuFirst(),
                       ),
                     );
                   },
