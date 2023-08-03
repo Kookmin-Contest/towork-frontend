@@ -7,9 +7,9 @@ class Token {
   Token(@required this._accesstoken, @required this._refreshtoken);
 
   Token.fromJson(Map<String, dynamic> json)
-      : _accesstoken = json['accesstoken'],
-        _refreshtoken = json['refreshtoken'];
+      : _accesstoken = json['accesToken'],
+        _refreshtoken = json['refreshToken'];
 
   Map<String, dynamic> toJson() =>
-      {'accesstoken': _accesstoken, 'refreshtoken': _refreshtoken};
+      {'accessToken': _accesstoken, 'refreshToken': _refreshtoken};
 }

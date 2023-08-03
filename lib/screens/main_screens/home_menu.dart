@@ -35,9 +35,9 @@ class _HomeMenuState extends State<HomeMenu> {
                 ),
                 SizedBox(height: 6.0),
                 Container(
-                  width: 320.0,
+                  width: 360.0,
                   height: 350.0,
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
                     border: Border.all(color: Colors.grey, width: 2.0),
