@@ -27,7 +27,7 @@ Future<Dio> dioHandler(BuildContext context, String requestUrl) async {
       onError: (e, handler) async {
         print(e);
         print(handler);
-        if (e.response?.statusCode == 403) {
+        if (e.response?.statusCode == 401) {
           final dynamic refreshToken = await _storage.read(key: "token");
           dynamic data = jsonDecode(refreshToken);
 
@@ -39,7 +39,7 @@ Future<Dio> dioHandler(BuildContext context, String requestUrl) async {
           refreshDio.interceptors.add(
             InterceptorsWrapper(
               onError: (e, handler) async {
-                if (e.response?.statusCode == 500) {
+                if (e.response?.statusCode == 401) {
                   await _storage.deleteAll();
                   final msg = "연결이 불안정하여 로그아웃 됩니다";
                   Fluttertoast.showToast(msg: msg);

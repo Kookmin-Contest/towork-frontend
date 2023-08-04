@@ -3,9 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gotowork/providers/member_provider.dart';
+import 'package:gotowork/providers/provider/member_provider.dart';
 import 'package:gotowork/screens/login_screens/login_menu.dart';
-import 'package:gotowork/widgets/dio_handler.dart';
+import 'package:gotowork/shared/helper/dio_handler.dart';
 import 'package:provider/provider.dart';
 
 // 끝이 둥근 Appbar 만들어둔겁니다. 필요없으면 지울 예정
@@ -69,30 +69,36 @@ class _RoundAppBarState extends State<RoundAppBar> {
         child: Container(
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.watch<MemberProvider>().companyname,
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
-              ),
-              Row(children: [
-                Text(
-                  '안녕하세요,' + context.watch<MemberProvider>().username + '님!',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    _asyncMethod();
-                  },
-                  child: Text('임시 토큰 재요청 버튼'),
-                ),
-              ]),
-            ],
+          child: Consumer<MemberProvider>(
+            builder: (context, MemberProvider memberProvider, child) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.watch<MemberProvider>().companyname,
+                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  ),
+                  Row(children: [
+                    Text(
+                      '안녕하세요,' +
+                          context.watch<MemberProvider>().username +
+                          '님!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        _asyncMethod();
+                      },
+                      child: Text('임시 토큰 재요청 버튼'),
+                    ),
+                  ]),
+                ],
+              );
+            },
           ),
         ),
       ),

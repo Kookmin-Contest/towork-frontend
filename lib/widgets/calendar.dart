@@ -20,7 +20,7 @@ class _CalendarState extends State<Calendar> {
     return Stack(
       children: [
         TableCalendar(
-          focusedDay: DateTime.now(),
+          focusedDay: DateTime.now().toLocal(),
           firstDay: DateTime(2023, 1, 1),
           lastDay: DateTime(2023, 12, 31),
           startingDayOfWeek: StartingDayOfWeek.monday,
