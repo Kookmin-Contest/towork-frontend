@@ -5,39 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class UserProvider with ChangeNotifier {
-  String _email = "";
-  String _password = "";
-  String _name = "";
-  String _phoneNumber = "";
-  String _birthDate = "";
-
-  void set email(String email) {
-    this._email = email;
-    notifyListeners();
-  }
-
-  void set password(String password) {
-    this._password = password;
-    notifyListeners();
-  }
-
-  void set name(String name) {
-    this._name = name;
-    notifyListeners();
-  }
-
-  void set phoneNumber(String phoneNumber) {
-    this._phoneNumber = phoneNumber;
-    notifyListeners();
-  }
-
-  void set birthDate(String birthDate) {
-    this._birthDate = birthDate;
-    notifyListeners();
-  }
-}
-
+//폐기처분 할 예정입니다. 일단 혹시 몰라서 냅뒀습니다~
 class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -49,10 +17,7 @@ class Register extends StatelessWidget {
           brightness: Brightness.light,
           fontFamily: 'SUITE',
           visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: ChangeNotifierProvider(
-        create: (_) => UserProvider(),
-        child: RegisterPage(),
-      ),
+      home: RegisterPage(),
     );
   }
 }
@@ -63,8 +28,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late UserProvider _userProvider = Provider.of<UserProvider>(context);
-
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -118,21 +81,6 @@ class _RegisterPageState extends State<RegisterPage> {
       final msg = "로그인에 실패하였습니다.";
       Fluttertoast.showToast(msg: msg);
       return false;
-    }
-  }
-
-  void _checkEmail() async {
-    //이메일 형식 검사
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-
-    bool duplicate = false;
-    try {
-      //TODO : 이메일 중복검사 만들기
-    } catch (e) {
-      print(e);
-      duplicate = false;
     }
   }
 

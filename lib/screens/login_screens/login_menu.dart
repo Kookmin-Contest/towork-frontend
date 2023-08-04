@@ -62,7 +62,9 @@ class _LogInState extends State<LogIn> {
       if (await login(data['email'], data['password'], _formKey) == true) {
         Navigator.pushAndRemoveUntil(
           context,
-          _createRoute(),
+          MaterialPageRoute(
+            builder: (context) => Main(),
+          ),
           (route) => false,
         );
       } else {
@@ -284,12 +286,8 @@ class _LogInState extends State<LogIn> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SignupChoose(),
-                                      ),
-                                    );
+                                    Navigator.of(context)
+                                        .pushNamed('/signupchoose');
                                   },
                                 ),
                               ),
@@ -335,10 +333,22 @@ class _LogInState extends State<LogIn> {
       decoration: InputDecoration(
         hintText: '이메일을 입력해주세요',
         enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFBABBBA),
+            width: 1.5,
+          ),
           borderRadius: BorderRadius.all(
             Radius.circular(15),
           ),
-          borderSide: BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFBABBBA),
+            width: 1.5,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
         ),
       ),
       validator: (value) {
@@ -359,10 +369,22 @@ class _LogInState extends State<LogIn> {
       decoration: InputDecoration(
         hintText: '비밀번호를 입력해주세요',
         enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFBABBBA),
+            width: 1.5,
+          ),
           borderRadius: BorderRadius.all(
             Radius.circular(15),
           ),
-          borderSide: BorderSide(color: Colors.grey),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color(0xFFBABBBA),
+            width: 1.5,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
         ),
       ),
       keyboardType: TextInputType.text,
@@ -405,7 +427,9 @@ class _LogInState extends State<LogIn> {
               // 로그인화면 스택에서 제거하고 이동해야됩니다!!
               Navigator.pushAndRemoveUntil(
                 context,
-                _createRoute(),
+                MaterialPageRoute(
+                  builder: (context) => Main(),
+                ),
                 (route) => false,
               );
             } else if (error) {
@@ -417,23 +441,5 @@ class _LogInState extends State<LogIn> {
         },
       ),
     );
-  }
-
-  //화면전환 애니메이션 관련
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => Main(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return _fade(child, animation);
-      },
-    );
-  }
-
-  Widget _fade(Widget child, animation) {
-    var tween = Tween(
-      begin: 0.0,
-      end: 2000.0,
-    ).chain(CurveTween(curve: Curves.ease));
-    return FadeTransition(opacity: animation.drive(tween), child: child);
   }
 }

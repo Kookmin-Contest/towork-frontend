@@ -1,35 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gotowork/providers/provider/signup_provider.dart';
-import 'package:gotowork/screens/signup_screens/signup_menu2.dart';
-import 'package:gotowork/shared/helper/animatedRouter.dart';
+import 'package:gotowork/screens/signup_screens/signup_menu3.dart';
 import 'package:provider/provider.dart';
 
-class SignupMenuFirst extends StatefulWidget {
-  const SignupMenuFirst({super.key});
+import '../../shared/helper/animatedRouter.dart';
+
+class SignupMenuSecond extends StatefulWidget {
+  const SignupMenuSecond({super.key});
 
   @override
-  State<SignupMenuFirst> createState() => _SignupMenuFirstState();
+  State<SignupMenuSecond> createState() => _SignupMenuSecondState();
 }
 
-class _SignupMenuFirstState extends State<SignupMenuFirst> {
-  static final _formKey = GlobalKey<FormState>();
-  TextEditingController _email = TextEditingController();
-
-  void _checkEmail() async {
-    //이메일 형식 검사
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-
-    bool duplicate = false;
-    try {
-      //TODO : 이메일 중복검사 만들기
-    } catch (e) {
-      print(e);
-      duplicate = false;
-    }
-  }
-
+class _SignupMenuSecondState extends State<SignupMenuSecond> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,21 +52,21 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                 Row(
                   children: [
                     Text(
-                      '우선 ',
+                      '다음 ',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
-                      '이메일',
+                      '비밀번호',
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF60ADDA)),
                     ),
                     Text(
-                      '부터 입력해볼까요?',
+                      '를 입력해주세요!',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
@@ -95,7 +78,7 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                   height: 70,
                 ),
                 Text(
-                  '이메일',
+                  '비밀번호',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -104,49 +87,38 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                 SizedBox(
                   height: 8,
                 ),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    controller: _email,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "이메일을 입력해주세요.";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.all(12),
-                      filled: true,
-                      fillColor: Color(0xFFFFFFFF),
-                      focusColor: Color(0xFFFFFFFF),
-                      hintText: '이메일을 입력하세요.',
-                      hintStyle: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFFDADADA)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFBABBBA),
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
+                TextField(
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(12),
+                    filled: true,
+                    fillColor: Color(0xFFFFFFFF),
+                    focusColor: Color(0xFFFFFFFF),
+                    hintText: '비밀번호를 입력하세요.',
+                    hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFFDADADA)),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFBABBBA),
+                        width: 1,
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xFFBABBBA),
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFBABBBA),
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
                       ),
                     ),
                   ),
@@ -161,7 +133,7 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                         Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: Text(
-                            '1/5',
+                            '2/5',
                             style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: 16,
@@ -174,7 +146,7 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                           height: 10,
                         ),
                         LinearProgressIndicator(
-                          value: 0.2,
+                          value: 0.4,
                           backgroundColor: Color(0x80BABBBA),
                           valueColor: AlwaysStoppedAnimation<Color>(
                             Color(0xFF60ADDA),
@@ -187,23 +159,16 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                         CircleAvatar(
                           backgroundColor: Color(0xFF60ADDA),
                           radius: 26,
-                          child: Consumer<SignupProvider>(
-                            builder: (context, value, child) {
-                              return IconButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    value.email = _email.text;
-                                    Navigator.of(context)
-                                        .push(fadeRoute(SignupMenuSecond()));
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Color(0xFFFFFFFF),
-                                  size: 32,
-                                ),
-                              );
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(fadeRoute(SignupMenuThird()));
                             },
+                            icon: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              color: Color(0xFFFFFFFF),
+                              size: 32,
+                            ),
                           ),
                         )
                       ],
