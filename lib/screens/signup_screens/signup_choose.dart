@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gotowork/providers/provider/member_provider.dart';
+import 'package:gotowork/providers/provider/signup_provider.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu1.dart';
+import 'package:gotowork/shared/helper/animatedRouter.dart';
+import 'package:provider/provider.dart';
 
 class SignupChoose extends StatelessWidget {
   const SignupChoose({super.key});
@@ -52,12 +56,8 @@ class SignupChoose extends StatelessWidget {
                     ],
                   ),
                   onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignupMenuFirst(),
-                      ),
-                    );
+                    Navigator.of(context)
+                        .push(horizontalSlidingRoute(SignupMenuFirst()));
                   },
                 ),
               ),
