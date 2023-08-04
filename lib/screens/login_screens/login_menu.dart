@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/models/token_model.dart';
+import 'package:gotowork/providers/controller/loadingController.dart';
 import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/screens/webview.dart';
 import 'package:gotowork/shared/menu_main.dart';
@@ -11,6 +11,8 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:get/get.dart' as gx;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -27,6 +29,8 @@ class _LogInState extends State<LogIn> {
   static final storage = FlutterSecureStorage();
   static final _formKey = GlobalKey<FormState>();
   static String _base = '';
+  static final _isLoadingController = gx.Get.put(IsLoadingController());
+  bool checked = false;
 
   @override
   void initState() {
@@ -51,13 +55,14 @@ class _LogInState extends State<LogIn> {
   // 자동 로그인 매서드
   _asyncMethod() async {
     userinfo = await storage.read(key: 'login');
+    _isLoadingController.isLoading = true;
 
     if (userinfo != null) {
       dynamic data = jsonDecode(userinfo);
       if (await login(data['email'], data['password'], _formKey) == true) {
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Main()),
+          _createRoute(),
           (route) => false,
         );
       } else {
@@ -68,6 +73,8 @@ class _LogInState extends State<LogIn> {
       final msg = "로그인을 해주세요";
       Fluttertoast.showToast(msg: msg);
     }
+
+    _isLoadingController.isLoading = false;
   }
 
   // 일반적인 이메일 로그인 방식
@@ -86,8 +93,10 @@ class _LogInState extends State<LogIn> {
         final accesstoken = response.data['accessToken'];
         final refreshtoken = response.data['refreshToken'];
 
-        var login = await jsonEncode(Login('$accountName', '$password'));
-        await storage.write(key: 'login', value: login);
+        if (checked == true) {
+          var login = await jsonEncode(Login('$accountName', '$password'));
+          await storage.write(key: 'login', value: login);
+        }
 
         var token = await jsonEncode(Token(accesstoken, refreshtoken));
         await storage.write(key: 'token', value: token);
@@ -144,16 +153,6 @@ class _LogInState extends State<LogIn> {
     }
   }
 
-  void socialLoginTest() async {
-    try {
-      var dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000));
-      Response response = await dio.get(_base + '/oauth2/social-login/kakao');
-      print(response);
-    } catch (e) {
-      print(e);
-    }
-  }
-
   //snackbar 표시
   void showSnackBar(BuildContext context, Text text) {
     final snackBar = SnackBar(
@@ -172,119 +171,160 @@ class _LogInState extends State<LogIn> {
           backgroundColor: const Color(0xff60adda),
           elevation: 3.0,
           centerTitle: true),
-      body: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: (EdgeInsets.only(top: 30)),
-              ),
-              Center(
-                child: Image(
-                  image: AssetImage('assets/logo.png'),
-                  width: 140,
-                  height: 140,
-                ),
-              ),
-              Form(
-                key: _formKey,
-                child: Theme(
-                  data: ThemeData(
-                    primaryColor: Colors.grey,
-                    inputDecorationTheme: InputDecorationTheme(
-                      labelStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15.0,
+      body: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: SingleChildScrollView(
+              physics: ScrollPhysics(),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: (EdgeInsets.only(top: 30)),
+                  ),
+                  Center(
+                    child: Image(
+                      image: AssetImage('assets/logo.png'),
+                      width: 140,
+                      height: 140,
+                    ),
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Theme(
+                      data: ThemeData(
+                        primaryColor: Colors.grey,
+                        inputDecorationTheme: InputDecorationTheme(
+                          labelStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                      ),
+                      child: Container(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              _EmailField(),
+                              SizedBox(
+                                height: 7.0,
+                              ),
+                              _PasswordField(),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              _EmailLoginButton(_formKey),
+                              Container(
+                                child: Row(children: <Widget>[
+                                  Checkbox(
+                                    value: checked,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        checked = value!;
+                                      });
+                                    },
+                                  ),
+                                  Text("자동 로그인")
+                                ]),
+                              ),
+                              Text('or'),
+                              SignInButton(
+                                Buttons.Facebook,
+                                onPressed: () async {
+                                  goggleSocialLogin();
+                                },
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              Divider(
+                                height: 10.0,
+                                color: Colors.grey,
+                                thickness: 0.8,
+                              ),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              SizedBox(
+                                width: 200.0,
+                                height: 40.0,
+                                child: TextButton(
+                                  child: Text(
+                                    "아이디/비밀번호 찾기",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    //TODO : 아이디/비밀번호 찾기 연결하기
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewTest(),
+                                        ));
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 80.0,
+                                height: 40.0,
+                                child: TextButton(
+                                  child: Text(
+                                    "회원 가입",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SignupChoose(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 120.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        _EmailField(),
-                        SizedBox(
-                          height: 7.0,
-                        ),
-                        _PasswordField(),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _EmailLoginButton(_formKey),
-                        Text('or'),
-                        SignInButton(
-                          Buttons.Facebook,
-                          onPressed: () async {
-                            goggleSocialLogin();
-                          },
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Divider(
-                          height: 10.0,
-                          color: Colors.grey,
-                          thickness: 0.8,
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        SizedBox(
-                          width: 200.0,
-                          height: 40.0,
-                          child: TextButton(
-                            child: Text(
-                              "아이디/비밀번호 찾기",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            onPressed: () {
-                              //TODO : 아이디/비밀번호 찾기 연결하기
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => WebViewTest(),
-                                  ));
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 80.0,
-                          height: 40.0,
-                          child: TextButton(
-                            child: Text(
-                              "회원 가입",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SignupChoose(),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                ],
+              ),
+            ),
+          ),
+          gx.Obx(
+            () => Offstage(
+              offstage: !_isLoadingController.isLoading,
+              child: Stack(
+                children: const <Widget>[
+                  Opacity(
+                    opacity: 0.5,
+                    child: ModalBarrier(
+                      dismissible: false,
+                      color: Colors.black,
                     ),
                   ),
-                ),
+                  Center(
+                    child: SpinKitFadingCircle(
+                      color: const Color(0xff60adda),
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -358,13 +398,14 @@ class _LogInState extends State<LogIn> {
           ],
         ),
         onPressed: () async {
+          _isLoadingController.isLoading = true;
           if (_formKey.currentState!.validate()) {
             if (await login(email.text, password.text, _formKey) == true) {
               // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
               // 로그인화면 스택에서 제거하고 이동해야됩니다!!
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => Main()),
+                _createRoute(),
                 (route) => false,
               );
             } else if (error) {
@@ -372,8 +413,27 @@ class _LogInState extends State<LogIn> {
               error = false;
             }
           }
+          _isLoadingController.isLoading = false;
         },
       ),
     );
+  }
+
+  //화면전환 애니메이션 관련
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => Main(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return _fade(child, animation);
+      },
+    );
+  }
+
+  Widget _fade(Widget child, animation) {
+    var tween = Tween(
+      begin: 0.0,
+      end: 2000.0,
+    ).chain(CurveTween(curve: Curves.ease));
+    return FadeTransition(opacity: animation.drive(tween), child: child);
   }
 }

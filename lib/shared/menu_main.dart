@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gotowork/providers/member_provider.dart';
+import 'package:gotowork/providers/provider/member_provider.dart';
 import 'package:gotowork/screens/main_screens/alert_menu.dart';
 import 'package:gotowork/screens/main_screens/community_menu.dart';
 import 'package:gotowork/screens/main_screens/home_menu.dart';
@@ -8,7 +8,7 @@ import 'package:gotowork/screens/main_screens/setting_menu.dart';
 import 'package:gotowork/screens/workspace_screens/new_workspace_screen.dart';
 import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
-import 'package:gotowork/widgets/animatedIndexedStack.dart';
+import 'package:gotowork/shared/helper/animatedIndexedStack.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
