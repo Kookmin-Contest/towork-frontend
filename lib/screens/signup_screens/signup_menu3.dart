@@ -176,6 +176,8 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                           child: IconButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                context.read<SignupProvider>().name =
+                                    _name.text;
                                 Navigator.of(context)
                                     .push(fadeRoute(SignupMenuFourth()));
                               }

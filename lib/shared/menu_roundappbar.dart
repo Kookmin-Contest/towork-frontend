@@ -89,12 +89,6 @@ class _RoundAppBarState extends State<RoundAppBar> {
                           fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        _asyncMethod();
-                      },
-                      child: Text('임시 토큰 재요청 버튼'),
-                    ),
                   ]),
                 ],
               );

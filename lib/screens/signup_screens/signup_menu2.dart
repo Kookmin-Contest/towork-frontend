@@ -293,6 +293,7 @@ class _SignupMenuSecondState extends State<SignupMenuSecond> {
                               if (_formKey.currentState!.validate()) {
                                 context.read<SignupProvider>().password =
                                     _password.text;
+                                print(_password.text);
                                 Navigator.of(context)
                                     .push(fadeRoute(SignupMenuThird()));
                               }

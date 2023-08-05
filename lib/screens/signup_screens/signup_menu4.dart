@@ -15,7 +15,7 @@ class SignupMenuFourth extends StatefulWidget {
 
 class _SignupMenuFourthState extends State<SignupMenuFourth> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _name = TextEditingController();
+  TextEditingController _phoneNumber = TextEditingController();
 
   bool _checkPhoneNumber(String text) {
     //이메일 형식 검사
@@ -119,7 +119,7 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                       }
                       return null;
                     },
-                    controller: _name,
+                    controller: _phoneNumber,
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.all(12),
@@ -191,6 +191,8 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                           child: IconButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                context.read<SignupProvider>().phoneNumber =
+                                    _phoneNumber.text;
                                 Navigator.of(context)
                                     .push(fadeRoute(SignupMenuFifth()));
                               }
