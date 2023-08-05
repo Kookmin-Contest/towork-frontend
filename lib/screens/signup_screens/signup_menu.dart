@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 
 //폐기처분 할 예정입니다. 일단 혹시 몰라서 냅뒀습니다~
 class Register extends StatelessWidget {

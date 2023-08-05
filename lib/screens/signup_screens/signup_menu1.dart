@@ -12,22 +12,23 @@ class SignupMenuFirst extends StatefulWidget {
 }
 
 class _SignupMenuFirstState extends State<SignupMenuFirst> {
-  static final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   TextEditingController _email = TextEditingController();
 
-  void _checkEmail() async {
+  bool _checkEmailForm(String text) {
     //이메일 형식 검사
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = new RegExp(pattern);
-
-    bool duplicate = false;
-    try {
-      //TODO : 이메일 중복검사 만들기
-    } catch (e) {
-      print(e);
-      duplicate = false;
+    if (!regExp.hasMatch(text)) {
+      return false;
     }
+    return true;
+  }
+
+  Future<bool> _checkEmailDuplicate(String text) async {
+    //TODO : 이메일 중복 검사 추가
+    return true;
   }
 
   @override
@@ -115,6 +116,8 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "이메일을 입력해주세요.";
+                      } else if (!_checkEmailForm(value)) {
+                        return "이메일 형식이 올바르지 않습니다.";
                       }
                       return null;
                     },
@@ -190,11 +193,15 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                           child: Consumer<SignupProvider>(
                             builder: (context, value, child) {
                               return IconButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    value.email = _email.text;
-                                    Navigator.of(context)
-                                        .push(fadeRoute(SignupMenuSecond()));
+                                    if (await _checkEmailDuplicate(
+                                            _email.text) !=
+                                        false) {
+                                      value.email = _email.text;
+                                      Navigator.of(context)
+                                          .push(fadeRoute(SignupMenuSecond()));
+                                    }
                                   }
                                 },
                                 icon: Icon(
