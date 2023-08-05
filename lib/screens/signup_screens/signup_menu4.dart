@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:gotowork/providers/provider/signup_provider.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu2.dart';
-import 'package:gotowork/screens/signup_screens/signup_menu4.dart';
+import 'package:gotowork/screens/signup_screens/signup_menu5.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/helper/animatedRouter.dart';
 
-class SignupMenuThird extends StatefulWidget {
-  const SignupMenuThird({super.key});
+class SignupMenuFourth extends StatefulWidget {
+  const SignupMenuFourth({super.key});
 
   @override
-  State<SignupMenuThird> createState() => _SignupMenuThirdState();
+  State<SignupMenuFourth> createState() => _SignupMenuFourthState();
 }
 
-class _SignupMenuThirdState extends State<SignupMenuThird> {
+class _SignupMenuFourthState extends State<SignupMenuFourth> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _name = TextEditingController();
+
+  bool _checkPhoneNumber(String text) {
+    //이메일 형식 검사
+    String pattern = r'^[0-9]{3}-[0-9]{4}-[0-9]{4}$';
+    RegExp regExp = new RegExp(pattern);
+
+    print(text);
+    if (!regExp.hasMatch(text)) {
+      return false;
+    }
+
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +60,7 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                   height: 100,
                 ),
                 Text(
-                  '당신은 누구신가요?',
+                  '거의 다 왔어요!',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -56,21 +69,21 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                 Row(
                   children: [
                     Text(
-                      '이번에는 ',
+                      '당신의 ',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
-                      '이름',
+                      '핸드폰 번호',
                       style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF60ADDA)),
                     ),
                     Text(
-                      '을 알려주세요!',
+                      '를 알려주세요!',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
@@ -82,7 +95,7 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                   height: 70,
                 ),
                 Text(
-                  '이름',
+                  '핸드폰 번호',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -100,7 +113,9 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "이름을 입력해주세요.";
+                        return "핸드폰 번호를 입력해주세요.";
+                      } else if (!_checkPhoneNumber(value)) {
+                        return "올바른 형식의 핸드폰 번호를 입력해주세요";
                       }
                       return null;
                     },
@@ -111,7 +126,7 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                       filled: true,
                       fillColor: Color(0xFFFFFFFF),
                       focusColor: Color(0xFFFFFFFF),
-                      hintText: '이름을 입력하세요.',
+                      hintText: '핸드폰 번호를 입력하세요.',
                       hintStyle: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -147,7 +162,7 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                         Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: Text(
-                            '3/5',
+                            '4/5',
                             style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: 16,
@@ -160,7 +175,7 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                           height: 10,
                         ),
                         LinearProgressIndicator(
-                          value: 0.6,
+                          value: 0.8,
                           backgroundColor: Color(0x80BABBBA),
                           valueColor: AlwaysStoppedAnimation<Color>(
                             Color(0xFF60ADDA),
@@ -177,7 +192,7 @@ class _SignupMenuThirdState extends State<SignupMenuThird> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 Navigator.of(context)
-                                    .push(fadeRoute(SignupMenuFourth()));
+                                    .push(fadeRoute(SignupMenuFifth()));
                               }
                             },
                             icon: Icon(
