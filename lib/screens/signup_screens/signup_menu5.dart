@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' as gx;
@@ -178,7 +179,8 @@ class _SignupMenuFifthState extends State<SignupMenuFifth> {
                         controller: _birthDate,
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding: EdgeInsets.all(12),
+                          contentPadding:
+                              EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
                           filled: true,
                           fillColor: Color(0xFFFFFFFF),
                           focusColor: Color(0xFFFFFFFF),
@@ -210,25 +212,25 @@ class _SignupMenuFifthState extends State<SignupMenuFifth> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 30),
+                        padding: EdgeInsets.only(bottom: 30.h),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(right: 15),
+                              padding: EdgeInsets.only(right: 15.w),
                               child: Text(
                                 '5/5',
                                 style: TextStyle(
                                   fontFamily: 'Roboto',
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                   color: Color(0xFF60ADDA),
                                 ),
                               ),
                             ),
                             SizedBox(
-                              height: 10,
+                              height: 10.h,
                             ),
                             LinearProgressIndicator(
                               value: 1.0,
@@ -236,14 +238,14 @@ class _SignupMenuFifthState extends State<SignupMenuFifth> {
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 Color(0xFF60ADDA),
                               ),
-                              minHeight: 2.0,
+                              minHeight: 2.0.h,
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 20.h,
                             ),
                             CircleAvatar(
                               backgroundColor: Color(0xFF60ADDA),
-                              radius: 26,
+                              radius: 26.sp,
                               child: IconButton(
                                 onPressed: () async {
                                   _isLoadingController.isLoading = true;

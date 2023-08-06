@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gotowork/main.dart';
 import 'package:gotowork/screens/login_screens/login_menu.dart';
 import 'package:gotowork/widgets/calendar.dart';
 
@@ -27,7 +28,7 @@ class _HomeMenuState extends State<HomeMenu> {
                     await storage.delete(key: 'login');
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => LogIn()),
+                      MaterialPageRoute(builder: (context) => MyApp()),
                       (route) => false,
                     );
                   },

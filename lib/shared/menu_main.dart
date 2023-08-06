@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gotowork/providers/provider/member_provider.dart';
 import 'package:gotowork/screens/main_screens/alert_menu.dart';
 import 'package:gotowork/screens/main_screens/community_menu.dart';
@@ -15,17 +16,27 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '메인 메뉴',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          brightness: Brightness.light,
-          fontFamily: 'NotoSansKr',
-          visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: MultiProvider(providers: [
-        ChangeNotifierProvider(create: (_) => MemberProvider()),
-      ], child: MainMenu()),
+    return ScreenUtilInit(
+      designSize: Size(411.42857142857144, 867.4285714285714),
+      builder: (context, child) {
+        return MaterialApp(
+          title: '메인 메뉴',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              brightness: Brightness.light,
+              fontFamily: 'NotoSansKr',
+              visualDensity: VisualDensity.adaptivePlatformDensity),
+          builder: (context, child) {
+            return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: child!);
+          },
+          home: MultiProvider(providers: [
+            ChangeNotifierProvider(create: (_) => MemberProvider()),
+          ], child: MainMenu()),
+        );
+      },
     );
   }
 }
@@ -130,6 +141,9 @@ class _MainMenuState extends State<MainMenu>
 
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).size.width.toString() +
+        ', ' +
+        MediaQuery.of(context).size.height.toString());
     return Scaffold(
       key: _scaffoldKey,
       appBar: _indexedAppBar,
@@ -155,10 +169,11 @@ class _MainMenuState extends State<MainMenu>
               ),
             ),
             Container(
-              padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+              padding: EdgeInsets.fromLTRB(15.w, 10.h, 0, 10.h),
               child: Text(
                 'WorkSpace',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0.sp),
               ),
             ),
             ListTile(
@@ -174,7 +189,10 @@ class _MainMenuState extends State<MainMenu>
               },
             ),
             ListTile(
-              title: Text('새 워크스페이스 만들기'),
+              title: Text(
+                '새 워크스페이스 만들기',
+                style: TextStyle(),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
@@ -188,14 +206,19 @@ class _MainMenuState extends State<MainMenu>
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        selectedItemColor: Colors.blueAccent,
-        onTap: _onTap,
-        items: _routes.map((route) {
-          return BottomNavigationBarItem(icon: route.icon, label: route.name);
-        }).toList(),
+      bottomNavigationBar: SizedBox(
+        height: 70.0.h,
+        child: BottomNavigationBar(
+          iconSize: 25.0.sp,
+          selectedFontSize: 12.0.sp,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          selectedItemColor: Colors.blueAccent,
+          onTap: _onTap,
+          items: _routes.map((route) {
+            return BottomNavigationBarItem(icon: route.icon, label: route.name);
+          }).toList(),
+        ),
       ),
     );
   }

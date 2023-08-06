@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gotowork/providers/provider/signup_provider.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu2.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu5.dart';
@@ -122,31 +123,32 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                     controller: _phoneNumber,
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding: EdgeInsets.all(12),
+                      contentPadding:
+                          EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
                       filled: true,
                       fillColor: Color(0xFFFFFFFF),
                       focusColor: Color(0xFFFFFFFF),
                       hintText: '핸드폰 번호를 입력하세요.',
                       hintStyle: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFFDADADA)),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0xFFBABBBA),
-                          width: 1,
+                          width: 1.w,
                         ),
                         borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                          Radius.circular(8.r),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(0xFFBABBBA),
-                          width: 1,
+                          width: 1.w,
                         ),
                         borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                          Radius.circular(8.r),
                         ),
                       ),
                     ),
@@ -154,25 +156,25 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 30),
+                    padding: EdgeInsets.only(bottom: 30.h),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(right: 15),
+                          padding: EdgeInsets.only(right: 15.w),
                           child: Text(
-                            '4/5',
+                            '3/5',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF60ADDA),
                             ),
                           ),
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 10.h,
                         ),
                         LinearProgressIndicator(
                           value: 0.8,
@@ -180,14 +182,14 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                           valueColor: AlwaysStoppedAnimation<Color>(
                             Color(0xFF60ADDA),
                           ),
-                          minHeight: 2.0,
+                          minHeight: 2.0.h,
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 20.h,
                         ),
                         CircleAvatar(
                           backgroundColor: Color(0xFF60ADDA),
-                          radius: 26,
+                          radius: 26.sp,
                           child: IconButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
@@ -200,7 +202,7 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                             icon: Icon(
                               Icons.arrow_forward_ios_rounded,
                               color: Color(0xFFFFFFFF),
-                              size: 32,
+                              size: 32.sp,
                             ),
                           ),
                         )
