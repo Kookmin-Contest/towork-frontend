@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:gotowork/providers/controller/loadingController.dart';
 import 'package:gotowork/providers/provider/signup_provider.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu2.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
+import 'package:gotowork/shared/helper/scaleHelper.dart';
 import 'package:provider/provider.dart';
 
 class SignupMenuFirst extends StatefulWidget {
@@ -65,19 +67,19 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
               color: Color(0xFFF9F9F9),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: 30,
-                  horizontal: 30,
+                  vertical: 30.h,
+                  horizontal: 30.w,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 100,
+                      height: 100.h,
                     ),
                     Text(
                       '오늘의 출근에 오신것을 환영합니다!',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -86,45 +88,45 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                         Text(
                           '우선 ',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 24.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
                           '이메일',
                           style: TextStyle(
-                              fontSize: 24,
+                              fontSize: 24.sp,
                               fontWeight: FontWeight.w500,
                               color: Color(0xFF60ADDA)),
                         ),
                         Text(
                           '부터 입력해볼까요?',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 24.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: 70,
+                      height: 70.h,
                     ),
                     Text(
                       '이메일',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(
-                      height: 8,
+                      height: 8.h,
                     ),
                     Form(
                       key: _formKey,
                       child: TextFormField(
                         controller: _email,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
                         ),
                         validator: (value) {
@@ -138,22 +140,23 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           isDense: true,
-                          contentPadding: EdgeInsets.all(12),
+                          contentPadding:
+                              EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
                           filled: true,
                           fillColor: Color(0xFFFFFFFF),
                           focusColor: Color(0xFFFFFFFF),
                           hintText: '이메일을 입력하세요.',
                           hintStyle: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w400,
                               color: Color(0xFFDADADA)),
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Color(0xFFBABBBA),
-                              width: 1,
+                              width: 1.w,
                             ),
                             borderRadius: BorderRadius.all(
-                              Radius.circular(8),
+                              Radius.circular(8.r),
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
@@ -162,7 +165,7 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                               width: 1,
                             ),
                             borderRadius: BorderRadius.all(
-                              Radius.circular(8),
+                              Radius.circular(8.r),
                             ),
                           ),
                         ),
@@ -170,18 +173,18 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 30),
+                        padding: EdgeInsets.only(bottom: 30.h),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(right: 15),
+                              padding: EdgeInsets.only(right: 15.w),
                               child: Text(
                                 '1/5',
                                 style: TextStyle(
                                   fontFamily: 'Roboto',
-                                  fontSize: 16,
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w700,
                                   color: Color(0xFF60ADDA),
                                 ),
@@ -196,14 +199,14 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 Color(0xFF60ADDA),
                               ),
-                              minHeight: 2.0,
+                              minHeight: 2.0.h,
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 20.h,
                             ),
                             CircleAvatar(
                               backgroundColor: Color(0xFF60ADDA),
-                              radius: 26,
+                              radius: 26.sp,
                               child: Consumer<SignupProvider>(
                                 builder: (context, value, child) {
                                   return IconButton(
@@ -225,7 +228,7 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                                     icon: Icon(
                                       Icons.arrow_forward_ios_rounded,
                                       color: Color(0xFFFFFFFF),
-                                      size: 32,
+                                      size: 32.sp,
                                     ),
                                   );
                                 },

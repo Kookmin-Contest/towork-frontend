@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +31,7 @@ class _CalendarState extends State<Calendar> {
                 DateFormat('yyyy.MM').format(date),
             leftChevronIcon: Icon(Icons.chevron_left),
             rightChevronIcon: Icon(Icons.chevron_right),
-            headerPadding: EdgeInsets.only(right: 40),
+            headerPadding: EdgeInsets.only(right: 40.w),
           ),
           daysOfWeekStyle: DaysOfWeekStyle(
             dowTextFormatter: (date, locale) {

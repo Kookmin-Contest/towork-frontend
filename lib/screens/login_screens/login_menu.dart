@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/models/token_model.dart';
 import 'package:gotowork/providers/controller/loadingController.dart';
+import 'package:gotowork/screens/join_screens/workspace_join_screen.dart';
 import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/screens/webview.dart';
+import 'package:gotowork/shared/helper/scaleHelper.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -28,14 +32,14 @@ class _LogInState extends State<LogIn> {
   bool error = false;
   static final storage = FlutterSecureStorage();
   static final _formKey = GlobalKey<FormState>();
-  static String _base = '';
+  static String _base =
+      'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
   static final _isLoadingController = gx.Get.put(IsLoadingController());
   bool checked = false;
 
   @override
   void initState() {
     super.initState();
-
     // if (Platform.isAndroid) {
     //   _base = 'http://10.0.2.2:8080';
     // } else if (Platform.isIOS) {
@@ -43,10 +47,6 @@ class _LogInState extends State<LogIn> {
     // } else {
     //   _base = "http://localhost:8080";
     // }
-
-    _base =
-        'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });
@@ -108,7 +108,7 @@ class _LogInState extends State<LogIn> {
 
         return true;
       }
-      final msg = "로그인에 실패하였습니다.";
+      final msg = "로그인에 실패하였f습니다.";
       Fluttertoast.showToast(msg: msg);
       return false;
     } on DioError catch (e) {
@@ -126,7 +126,8 @@ class _LogInState extends State<LogIn> {
         final msg = "아이디 또는 비밀번호가 일치하지 않습니다";
         Fluttertoast.showToast(msg: msg);
       } else {
-        final msg = "로그인에 실패하였습니다.";
+        // final msg = "로그인에 실패하였습니다.";
+        final msg = e.toString();
         Fluttertoast.showToast(msg: msg);
       }
 
@@ -167,243 +168,270 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('로그인 화면'),
-          backgroundColor: const Color(0xff60adda),
-          elevation: 3.0,
-          centerTitle: true),
-      body: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: SingleChildScrollView(
-              physics: ScrollPhysics(),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: (EdgeInsets.only(top: 30)),
-                  ),
-                  Center(
-                    child: Image(
-                      image: AssetImage('assets/logo.png'),
-                      width: 140,
-                      height: 140,
-                    ),
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Theme(
-                      data: ThemeData(
-                        primaryColor: Colors.grey,
-                        inputDecorationTheme: InputDecorationTheme(
-                          labelStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 15.0,
+    return ScreenUtilInit(
+        designSize: Size(411.42857142857144, 867.4285714285714),
+        builder: (context, child) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  child: GestureDetector(
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 80.0.h),
+                          child: Image(
+                            image: AssetImage('assets/logo.png'),
+                            width: 180.w,
+                            height: 180.h,
                           ),
                         ),
-                      ),
-                      child: Container(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 0.0),
+                        Padding(
+                          padding: EdgeInsets.only(top: 40.0.h),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              _EmailField(),
-                              SizedBox(
-                                height: 7.0,
-                              ),
-                              _PasswordField(),
-                              SizedBox(
-                                height: 20.0,
-                              ),
-                              _EmailLoginButton(_formKey),
-                              Container(
-                                child: Row(children: <Widget>[
-                                  Checkbox(
-                                    value: checked,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        checked = value!;
-                                      });
-                                    },
-                                  ),
-                                  Text("자동 로그인")
-                                ]),
-                              ),
-                              Text('or'),
-                              SignInButton(
-                                Buttons.Facebook,
-                                onPressed: () async {
-                                  goggleSocialLogin();
-                                },
-                              ),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Divider(
-                                height: 10.0,
-                                color: Colors.grey,
-                                thickness: 0.8,
-                              ),
-                              SizedBox(
-                                height: 30.0,
-                              ),
-                              SizedBox(
-                                width: 200.0,
-                                height: 40.0,
-                                child: TextButton(
-                                  child: Text(
-                                    "아이디/비밀번호 찾기",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600,
+                            children: [
+                              Form(
+                                key: _formKey,
+                                child: Theme(
+                                  data: ThemeData(
+                                    primaryColor: Colors.grey,
+                                    inputDecorationTheme: InputDecorationTheme(
+                                      labelStyle: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 15.0.sp,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    //TODO : 아이디/비밀번호 찾기 연결하기
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => WebViewTest(),
-                                        ));
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                width: 80.0,
-                                height: 40.0,
-                                child: TextButton(
-                                  child: Text(
-                                    "회원 가입",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600,
+                                  child: Container(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          20.0.w, 10.0.h, 20.0.w, 0.0.h),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          _EmailField(),
+                                          SizedBox(
+                                            height: 7.0.h,
+                                          ),
+                                          _PasswordField(),
+                                          SizedBox(
+                                            height: 20.0.h,
+                                          ),
+                                          _EmailLoginButton(_formKey),
+                                          Container(
+                                            width: 400.w,
+                                            height: 50.h,
+                                            child: Row(children: <Widget>[
+                                              Checkbox(
+                                                value: checked,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    checked = value!;
+                                                  });
+                                                },
+                                              ),
+                                              Text(
+                                                "자동 로그인",
+                                                style: TextStyle(
+                                                    fontSize: 14.0.sp),
+                                              )
+                                            ]),
+                                          ),
+                                          // Text(
+                                          //   'or',
+                                          //   style: TextStyle(fontSize: 12.0 * w),
+                                          // ),
+                                          // Container(
+                                          //   width: 300.0 * w,
+                                          //   height: 35.0 * h,
+                                          //   child: SignInButton(
+                                          //     Buttons.Facebook,
+                                          //     onPressed: () async {
+                                          //       goggleSocialLogin();
+                                          //     },
+                                          //   ),
+                                          // ),
+                                          SizedBox(
+                                            height: 5.0.h,
+                                          ),
+                                          Divider(
+                                            height: 10.0.h,
+                                            color: Colors.grey,
+                                            thickness: 0.8.w,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed('/signupchoose');
-                                  },
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 20.0.h),
+                          child: Container(
+                            width: 300.w,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    child: Text(
+                                      "아이디/비밀번호 찾기",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15.0.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      //TODO : 아이디/비밀번호 찾기 연결하기
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => WebViewTest(),
+                                          ));
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text(
+                                      "회원 가입",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15.0.sp,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pushNamed('/signupchoose');
+                                    },
+                                  ),
+                                ]),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          gx.Obx(
-            () => Offstage(
-              offstage: !_isLoadingController.isLoading,
-              child: Stack(
-                children: const <Widget>[
-                  Opacity(
-                    opacity: 0.5,
-                    child: ModalBarrier(
-                      dismissible: false,
-                      color: Colors.black,
+                ),
+                gx.Obx(
+                  () => Offstage(
+                    offstage: !_isLoadingController.isLoading,
+                    child: Stack(
+                      children: const <Widget>[
+                        Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                            dismissible: false,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Center(
+                          child: SpinKitFadingCircle(
+                            color: const Color(0xff60adda),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  Center(
-                    child: SpinKitFadingCircle(
-                      color: const Color(0xff60adda),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Widget _EmailField() {
-    return TextFormField(
-      controller: email,
-      decoration: InputDecoration(
-        hintText: '이메일을 입력해주세요',
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xFFBABBBA),
-            width: 1.5,
+    return SizedBox(
+      width: 400.w,
+      height: 76.h,
+      child: TextFormField(
+        controller: email,
+        decoration: InputDecoration(
+          hintText: '이메일을 입력해주세요',
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFBABBBA),
+              width: 1.5.w,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
           ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFBABBBA),
+              width: 1.5.w,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
           ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xFFBABBBA),
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
-        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "이메일을 입력해주세요.";
+          } else if (error) {
+            return "아이디 또는 비밀번호가 잘못되었습니다.";
+          }
+          return null;
+        },
+        keyboardType: TextInputType.emailAddress,
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "이메일을 입력해주세요.";
-        } else if (error) {
-          return "아이디 또는 비밀번호가 잘못되었습니다.";
-        }
-        return null;
-      },
-      keyboardType: TextInputType.emailAddress,
     );
   }
 
   Widget _PasswordField() {
-    return TextFormField(
-      controller: password,
-      decoration: InputDecoration(
-        hintText: '비밀번호를 입력해주세요',
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xFFBABBBA),
-            width: 1.5,
+    return SizedBox(
+      width: 400.w,
+      height: 76.h,
+      child: TextFormField(
+        controller: password,
+        decoration: InputDecoration(
+          hintText: '비밀번호를 입력해주세요',
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFBABBBA),
+              width: 1.5.w,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
           ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFBABBBA),
+              width: 1.5.w,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
           ),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xFFBABBBA),
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
-        ),
+        keyboardType: TextInputType.text,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "비밀번호를 입력해주세요.";
+          } else if (error) {
+            return "아이디 또는 비밀번호가 잘못되었습니다.";
+          }
+          return null;
+        },
+        obscureText: true,
       ),
-      keyboardType: TextInputType.text,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "비밀번호를 입력해주세요.";
-        } else if (error) {
-          return "아이디 또는 비밀번호가 잘못되었습니다.";
-        }
-        return null;
-      },
-      obscureText: true,
     );
   }
 
   Widget _EmailLoginButton(_formKey) {
     return ButtonTheme(
       minWidth: 10,
-      height: 50.0,
+      height: 50.0.h,
       child: ElevatedButton(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -411,12 +439,15 @@ class _LogInState extends State<LogIn> {
             Icon(
               Icons.email,
               color: Colors.white,
-              size: 30.0,
+              size: 30.0.w,
             ),
             SizedBox(
-              width: 10.0,
+              width: 10.0.w,
             ),
-            Text('이메일로 로그인 하기')
+            Text(
+              '이메일로 로그인 하기',
+              style: TextStyle(fontSize: 15.0.sp),
+            )
           ],
         ),
         onPressed: () async {
