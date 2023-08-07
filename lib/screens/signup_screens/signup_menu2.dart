@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gotowork/providers/provider/signup_provider.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu3.dart';
 import 'package:provider/provider.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 
 import '../../shared/helper/animatedRouter.dart';
 

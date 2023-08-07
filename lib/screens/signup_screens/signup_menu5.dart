@@ -101,180 +101,188 @@ class _SignupMenuFifthState extends State<SignupMenuFifth> {
       ),
       body: Stack(
         children: [
-          GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: Container(
-              color: Color(0xFFF9F9F9),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 30,
-                  horizontal: 30,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 100,
-                    ),
-                    Text(
-                      '테스트 해봐야되가지고 임시로 만들었어요! 달력으로 바꿀거에요! 생일은 올바른 정규식인지 보는거 안만들었어요 ㅠㅠ',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+          CustomScrollView(
+            slivers: [
+              SliverFillRemaining(
+                child: GestureDetector(
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  child: Container(
+                    color: Color(0xFFF9F9F9),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 30.h,
+                        horizontal: 30.w,
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '마지막으로 ',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 100.h,
                           ),
-                        ),
-                        Text(
-                          '생일',
-                          style: TextStyle(
-                              fontSize: 24,
+                          Text(
+                            '테스트 해봐야되가지고 임시로 만들었어요! 달력으로 바꿀거에요! 생일은 올바른 정규식인지 보는거 안만들었어요 ㅠㅠ',
+                            style: TextStyle(
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF60ADDA)),
-                        ),
-                        Text(
-                          '을 알려주세요!',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 70,
-                    ),
-                    Text(
-                      '생일',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: TextFormField(
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "생일을 입력해주세요.";
-                          }
-                          return null;
-                        },
-                        controller: _birthDate,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding:
-                              EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
-                          filled: true,
-                          fillColor: Color(0xFFFFFFFF),
-                          focusColor: Color(0xFFFFFFFF),
-                          hintText: '생일을 입력하세요.',
-                          hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFFDADADA)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFBABBBA),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
                             ),
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFBABBBA),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 30.h),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 15.w),
-                              child: Text(
-                                '5/5',
+                          Row(
+                            children: [
+                              Text(
+                                '마지막으로 ',
                                 style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF60ADDA),
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                '생일',
+                                style: TextStyle(
+                                    fontSize: 24.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF60ADDA)),
+                              ),
+                              Text(
+                                '을 알려주세요!',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 70.h,
+                          ),
+                          Text(
+                            '생일',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              style: TextStyle(
+                                fontSize: 14.h,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "생일을 입력해주세요.";
+                                }
+                                return null;
+                              },
+                              controller: _birthDate,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
+                                filled: true,
+                                fillColor: Color(0xFFFFFFFF),
+                                focusColor: Color(0xFFFFFFFF),
+                                hintText: '생일을 입력하세요.',
+                                hintStyle: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xFFDADADA)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFBABBBA),
+                                    width: 1.w,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8.r),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFBABBBA),
+                                    width: 1.w,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8.r),
+                                  ),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            LinearProgressIndicator(
-                              value: 1.0,
-                              backgroundColor: Color(0x80BABBBA),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFF60ADDA),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 30.h),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 15.w),
+                                    child: Text(
+                                      '5/5',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF60ADDA),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  LinearProgressIndicator(
+                                    value: 1.0,
+                                    backgroundColor: Color(0x80BABBBA),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF60ADDA),
+                                    ),
+                                    minHeight: 2.0.h,
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  CircleAvatar(
+                                    backgroundColor: Color(0xFF60ADDA),
+                                    radius: 26.sp,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        _isLoadingController.isLoading = true;
+                                        if (_formKey.currentState!.validate()) {
+                                          context
+                                              .read<SignupProvider>()
+                                              .birthDate = _birthDate.text;
+                                          if (await _signup() == true) {
+                                            Navigator.of(context).popUntil(
+                                                (route) => route.isFirst);
+                                            _isLoadingController.isLoading =
+                                                false;
+                                          }
+                                        }
+                                        _isLoadingController.isLoading = false;
+                                      },
+                                      icon: Icon(
+                                        Icons.check,
+                                        color: Color(0xFFFFFFFF),
+                                        size: 32.sp,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
-                              minHeight: 2.0.h,
                             ),
-                            SizedBox(
-                              height: 20.h,
-                            ),
-                            CircleAvatar(
-                              backgroundColor: Color(0xFF60ADDA),
-                              radius: 26.sp,
-                              child: IconButton(
-                                onPressed: () async {
-                                  _isLoadingController.isLoading = true;
-                                  if (_formKey.currentState!.validate()) {
-                                    context.read<SignupProvider>().birthDate =
-                                        _birthDate.text;
-                                    if (await _signup() == true) {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
-                                      _isLoadingController.isLoading = false;
-                                    }
-                                  }
-                                  _isLoadingController.isLoading = false;
-                                },
-                                icon: Icon(
-                                  Icons.check,
-                                  color: Color(0xFFFFFFFF),
-                                  size: 32,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
           gx.Obx(
             () => Offstage(
