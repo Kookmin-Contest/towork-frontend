@@ -7,14 +7,11 @@ import 'package:gotowork/models/login_model.dart';
 import 'package:gotowork/models/token_model.dart';
 import 'package:gotowork/providers/controller/loadingController.dart';
 import 'package:gotowork/screens/join_screens/workspace_join_screen.dart';
-import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/screens/webview.dart';
-import 'package:gotowork/shared/helper/scaleHelper.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:get/get.dart' as gx;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -63,7 +60,7 @@ class _LogInState extends State<LogIn> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => Main(),
+            builder: (context) => JoinWorkspace(),
           ),
           (route) => false,
         );
@@ -459,7 +456,7 @@ class _LogInState extends State<LogIn> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Main(),
+                  builder: (context) => JoinWorkspace(),
                 ),
                 (route) => false,
               );
