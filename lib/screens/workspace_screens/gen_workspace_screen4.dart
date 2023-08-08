@@ -128,9 +128,10 @@ class _GenWorkSpaceScreen4State extends State<GenWorkSpaceScreen4> {
                             focusColor: Color(0xFFFFFFFF),
                             hintText: '소개는 250자 내로 작성해주세요.',
                             hintStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFDADADA)),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFFDADADA),
+                            ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0xFFBABBBA),

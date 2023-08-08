@@ -80,9 +80,10 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                           Text(
                             '직장',
                             style: TextStyle(
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF60ADDA)),
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF60ADDA),
+                            ),
                           ),
                           Text(
                             '을 만들어보세요.',
@@ -122,9 +123,10 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                             focusColor: Color(0xFFFFFFFF),
                             hintText: '회사명을 입력하세요.',
                             hintStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFDADADA)),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFFDADADA),
+                            ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0xFFBABBBA),

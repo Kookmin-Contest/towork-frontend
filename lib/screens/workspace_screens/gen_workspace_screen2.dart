@@ -135,9 +135,10 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                             focusColor: Color(0xFFFFFFFF),
                             hintText: '검색',
                             hintStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFDADADA)),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFFDADADA),
+                            ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0xFFBABBBA),
