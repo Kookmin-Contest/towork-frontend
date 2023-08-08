@@ -1,51 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gotowork/main.dart';
+import 'package:gotowork/widgets/calendar.dart';
 
-class Calendar extends StatefulWidget {
-  const Calendar({super.key});
-
+class HomeMenu extends StatefulWidget {
+  const HomeMenu({super.key});
   @override
-  State<Calendar> createState() => _CalendarState();
+  State<HomeMenu> createState() => _HomeMenuState();
 }
 
-class _CalendarState extends State<Calendar> {
-  List<DateTime> holidays = [
-    DateTime(2023, 1, 1),
-    DateTime(2023, 3, 1),
-  ];
+class _HomeMenuState extends State<HomeMenu> {
+  static final storage = FlutterSecureStorage();
+  dynamic userInfo = '';
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        TableCalendar(
-          focusedDay: DateTime.now().toLocal(),
-          firstDay: DateTime(2023, 1, 1),
-          lastDay: DateTime(2023, 12, 31),
-          startingDayOfWeek: StartingDayOfWeek.monday,
-          headerStyle: HeaderStyle(
-            formatButtonVisible: false,
-            titleTextFormatter: (date, locale) =>
-                DateFormat('yyyy.MM').format(date),
-            leftChevronIcon: Icon(Icons.chevron_left),
-            rightChevronIcon: Icon(Icons.chevron_right),
-            headerPadding: EdgeInsets.only(right: 40.w),
-          ),
-          daysOfWeekStyle: DaysOfWeekStyle(
-            dowTextFormatter: (date, locale) {
-              final days = ['월', '화', '수', '목', '금', '토', '일'];
-              return days[date.weekday - 1];
-            },
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              children: [
+                SizedBox(height: 40.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 350.0,
+                      height: 100.0,
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(color: Colors.grey, width: 2.0),
+                      ),
+                      child: Stack(
+                        children: [
+                          // 텍스트
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: RichText(
+                              textAlign: TextAlign.left,
+                              text: TextSpan(
+                                style: DefaultTextStyle.of(context).style,
+                                children: <TextSpan>[
+                                  TextSpan(text: '4/21일(금)의 근무시간은\n'),
+                                  TextSpan(
+                                      text: '21:00 ~ 06:00',
+                                      style: TextStyle(fontSize: 20)),
+                                  TextSpan(text: '입니다.'),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // 로그아웃 버튼
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await storage.delete(key: 'login');
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyApp()),
+                                  (route) => false,
+                                );
+                              },
+                              child: Text('임시 로그아웃 버튼'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.0),
+                Container(
+                  width: 350.0,
+                  height: 400.0,
+                  padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40.0),
+                    border: Border.all(color: Colors.grey, width: 2.0),
+                  ),
+                  child: Calendar(),
+                ),
+              ],
+            ),
           ),
         ),
-        Positioned(
-          top: 10,
-          right: 10,
-          child: Icon(Icons.alarm),
-        )
-      ],
+      ),
     );
   }
 }
