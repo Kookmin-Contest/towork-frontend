@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gotowork/screens/workspace_screens/gen_workspace_screen2.dart';
+import 'package:gotowork/screens/workspace_screens/gen_workspace_screen4.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
 
-class GenWorkSpaceScreen1 extends StatelessWidget {
-  const GenWorkSpaceScreen1({super.key});
+class GenWorkSpaceScreen3 extends StatefulWidget {
+  const GenWorkSpaceScreen3({super.key});
+
+  @override
+  State<GenWorkSpaceScreen3> createState() => _GenWorkSpaceScreen3State();
+}
+
+class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
+  String? dropdownValue1;
+  String? dropdownValue2;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +105,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                         height: 70.h,
                       ),
                       Text(
-                        '회사명',
+                        '사진',
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
@@ -106,45 +114,25 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                       SizedBox(
                         height: 8.h,
                       ),
-                      SizedBox(
-                        width: 400.w,
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
-                            filled: true,
-                            fillColor: Color(0xFFFFFFFF),
-                            focusColor: Color(0xFFFFFFFF),
-                            hintText: '회사명을 입력하세요.',
-                            hintStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFDADADA)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFBABBBA),
-                                width: 1.w,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.r),
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFBABBBA),
-                                width: 1.w,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.r),
-                              ),
-                            ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF60ADDA),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
                           ),
                         ),
+                        width: 83.w,
+                        height: 45.h,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.add_circle_outline_rounded,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8.h,
                       ),
                       Expanded(
                         child: Padding(
@@ -156,7 +144,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(right: 15.w),
                                 child: Text(
-                                  '1/4',
+                                  '3/4',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 16.sp,
@@ -169,7 +157,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                 height: 10.h,
                               ),
                               LinearProgressIndicator(
-                                value: 0.25,
+                                value: 0.75,
                                 backgroundColor: Color(0x80BABBBA),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   Color(0xFF60ADDA),
@@ -186,7 +174,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       horizontalSlidingRoute(
-                                        GenWorkSpaceScreen2(),
+                                        GenWorkSpaceScreen4(),
                                       ),
                                     );
                                   },

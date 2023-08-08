@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gotowork/screens/workspace_screens/gen_workspace_screen3.dart';
+import 'package:gotowork/shared/helper/animatedRouter.dart';
 
 class GenWorkSpaceScreen2 extends StatefulWidget {
   const GenWorkSpaceScreen2({super.key});
@@ -310,7 +312,7 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                               Padding(
                                 padding: EdgeInsets.only(right: 15.w),
                                 child: Text(
-                                  '2/3',
+                                  '2/4',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 16.sp,
@@ -323,7 +325,7 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                                 height: 10.h,
                               ),
                               LinearProgressIndicator(
-                                value: 0.6666,
+                                value: 0.5,
                                 backgroundColor: Color(0x80BABBBA),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   Color(0xFF60ADDA),
@@ -337,7 +339,13 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                                 backgroundColor: Color(0xFF60ADDA),
                                 radius: 26.sp,
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      horizontalSlidingRoute(
+                                        GenWorkSpaceScreen3(),
+                                      ),
+                                    );
+                                  },
                                   icon: Icon(
                                     Icons.arrow_forward_ios_rounded,
                                     color: Color(0xFFFFFFFF),

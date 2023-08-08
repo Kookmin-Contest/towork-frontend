@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gotowork/screens/workspace_screens/gen_workspace_screen2.dart';
-import 'package:gotowork/shared/helper/animatedRouter.dart';
 
-class GenWorkSpaceScreen1 extends StatelessWidget {
-  const GenWorkSpaceScreen1({super.key});
+class GenWorkSpaceScreen4 extends StatefulWidget {
+  const GenWorkSpaceScreen4({super.key});
+
+  @override
+  State<GenWorkSpaceScreen4> createState() => _GenWorkSpaceScreen4State();
+}
+
+class _GenWorkSpaceScreen4State extends State<GenWorkSpaceScreen4> {
+  String? dropdownValue1;
+  String? dropdownValue2;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +103,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                         height: 70.h,
                       ),
                       Text(
-                        '회사명',
+                        '소개',
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
@@ -108,7 +114,10 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                       ),
                       SizedBox(
                         width: 400.w,
-                        child: TextField(
+                        child: TextFormField(
+                          minLines: 8,
+                          maxLength: 250,
+                          maxLines: null,
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
@@ -120,7 +129,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                             filled: true,
                             fillColor: Color(0xFFFFFFFF),
                             focusColor: Color(0xFFFFFFFF),
-                            hintText: '회사명을 입력하세요.',
+                            hintText: '소개는 250자 내로 작성해주세요.',
                             hintStyle: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
@@ -146,6 +155,9 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 8.h,
+                      ),
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 30.h),
@@ -156,7 +168,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(right: 15.w),
                                 child: Text(
-                                  '1/4',
+                                  '4/4',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 16.sp,
@@ -169,7 +181,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                 height: 10.h,
                               ),
                               LinearProgressIndicator(
-                                value: 0.25,
+                                value: 1,
                                 backgroundColor: Color(0x80BABBBA),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   Color(0xFF60ADDA),
@@ -183,13 +195,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                 backgroundColor: Color(0xFF60ADDA),
                                 radius: 26.sp,
                                 child: IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      horizontalSlidingRoute(
-                                        GenWorkSpaceScreen2(),
-                                      ),
-                                    );
-                                  },
+                                  onPressed: () {},
                                   icon: Icon(
                                     Icons.arrow_forward_ios_rounded,
                                     color: Color(0xFFFFFFFF),
