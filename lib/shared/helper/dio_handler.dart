@@ -39,15 +39,57 @@ Future<Dio> dioHandler(BuildContext context, String requestUrl) async {
           refreshDio.interceptors.add(
             InterceptorsWrapper(
               onError: (e, handler) async {
-                if (e.response?.statusCode == 401) {
+                if (e.type == DioErrorType.connectTimeout ||
+                    e.type == DioErrorType.receiveTimeout) {
                   await _storage.deleteAll();
-                  final msg = "연결이 불안정하여 로그아웃 됩니다";
-                  Fluttertoast.showToast(msg: msg);
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => LogIn()),
-                    (route) => false,
-                  );
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext cxt) {
+                        return AlertDialog(
+                          content: Text('세션이 만료되어 로그아웃 됩니다'),
+                          actions: [
+                            Center(
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(cxt).pop();
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LogIn()),
+                                      (route) => false,
+                                    );
+                                  },
+                                  child: Text('확인')),
+                            )
+                          ],
+                        );
+                      });
+                } else if (e.response?.statusCode == 401) {
+                  await _storage.deleteAll();
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext cxt) {
+                        return AlertDialog(
+                          content: Text('세션이 만료되어 로그아웃 됩니다'),
+                          actions: [
+                            Center(
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(cxt).pop();
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LogIn()),
+                                      (route) => false,
+                                    );
+                                  },
+                                  child: Text('확인')),
+                            )
+                          ],
+                        );
+                      });
                 }
 
                 return handler.next(e);

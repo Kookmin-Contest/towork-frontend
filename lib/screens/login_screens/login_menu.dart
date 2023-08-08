@@ -8,6 +8,7 @@ import 'package:gotowork/models/token_model.dart';
 import 'package:gotowork/providers/controller/loadingController.dart';
 import 'package:gotowork/screens/join_screens/workspace_join_screen.dart';
 import 'package:gotowork/screens/webview.dart';
+import 'package:gotowork/shared/helper/dio_handler.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -56,14 +57,11 @@ class _LogInState extends State<LogIn> {
 
     if (userinfo != null) {
       dynamic data = jsonDecode(userinfo);
+      setState(() {
+        checked = true;
+      });
       if (await login(data['email'], data['password'], _formKey) == true) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => JoinWorkspace(),
-          ),
-          (route) => false,
-        );
+        _isLoadingController.isLoading = false;
       } else {
         final msg = "자동 로그인에 실패했습니다. 다시 로그인해주세요";
         Fluttertoast.showToast(msg: msg);
@@ -102,6 +100,31 @@ class _LogInState extends State<LogIn> {
 
         final msg = "로그인에 성공하였습니다.";
         Fluttertoast.showToast(msg: msg);
+
+        String url = _base + '/members/info';
+        dio = await dioHandler(context, url);
+
+        response = await dio.get(url);
+        print(response.data['countWorkspace']);
+        if (response.data['countWorkspace'] == 0) {
+          // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
+          // 로그인화면 스택에서 제거하고 이동해야됩니다!!
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => JoinWorkspace(),
+            ),
+            (route) => false,
+          );
+        } else {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Main(),
+            ),
+            (route) => false,
+          );
+        }
 
         return true;
       }
@@ -451,15 +474,7 @@ class _LogInState extends State<LogIn> {
           _isLoadingController.isLoading = true;
           if (_formKey.currentState!.validate()) {
             if (await login(email.text, password.text, _formKey) == true) {
-              // 로그인 -> 홈 화면 이동할땐 반드시 removeuntil로
-              // 로그인화면 스택에서 제거하고 이동해야됩니다!!
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => JoinWorkspace(),
-                ),
-                (route) => false,
-              );
+              _isLoadingController.isLoading = false;
             } else if (error) {
               _formKey.currentState!.validate();
               error = false;

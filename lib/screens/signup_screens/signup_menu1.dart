@@ -23,6 +23,7 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _email = TextEditingController();
   final _isLoadingController = gx.Get.put(IsLoadingController());
+  bool duplicate = false;
   String _base =
       'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
 
@@ -45,47 +46,32 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
     return true;
   }
 
-  Future<bool> _checkEmailDuplicate(String text) async {
+  Future<bool> _checkEmailDuplicate(String? text, GlobalKey _formkey) async {
     try {
       var dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000));
 
       var param = jsonEncode({
-        'email': context.read<SignupProvider>().email,
-        'password': context.read<SignupProvider>().password,
-        'name': context.read<SignupProvider>().name,
-        'phoneNumber': context.read<SignupProvider>().phoneNumber,
-        'birthDate': context.read<SignupProvider>().birthDate
+        'email': text,
       });
 
-      print(context.read<SignupProvider>().email);
-      print(context.read<SignupProvider>().name);
-      print(context.read<SignupProvider>().phoneNumber);
-      print(context.read<SignupProvider>().birthDate);
-      print('비밀번호 486 : ' + context.read<SignupProvider>().password);
-      Response response = await dio.post(_base + '/auth/signup',
+      Response response = await dio.post(_base + '/auth/duplicate-email',
           data: param, options: Options(contentType: Headers.jsonContentType));
 
-      print(response.statusCode);
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return true;
-      } else {
-        return false;
-      }
-    } on DioError catch (e) {
-      print(e);
-      if (e.type == DioErrorType.connectTimeout ||
-          e.type == DioErrorType.receiveTimeout) {
-        final msg = "서버에 문제가 생겨 회원가입에 실패했습니다.";
-        Fluttertoast.showToast(msg: msg);
-      }
-      if (e.response?.statusCode == 400) {
-        final msg = "이미 존재하는 아이디입니다.";
-        Fluttertoast.showToast(msg: msg);
-      } else {
-        final msg = "회원가입에 실패하였습니다.";
-        Fluttertoast.showToast(msg: msg);
       }
 
+      return false;
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.connectTimeout ||
+          e.type == DioErrorType.receiveTimeout) {
+        final msg = "서버에 문제가 생겨 중복 확인에 실패했습니다.";
+        Fluttertoast.showToast(msg: msg);
+      } else if (e.response?.statusCode != 200) {
+        duplicate = true;
+        _formKey.currentState!.validate();
+        duplicate = false;
+      }
       return false;
     } catch (e) {
       print(e);
@@ -187,6 +173,8 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                                   return "이메일을 입력해주세요.";
                                 } else if (!_checkEmailForm(value)) {
                                   return "이메일 형식이 올바르지 않습니다.";
+                                } else if (duplicate) {
+                                  return "이미 존재하는 아이디입니다.";
                                 }
                                 return null;
                               },
@@ -269,7 +257,7 @@ class _SignupMenuFirstState extends State<SignupMenuFirst> {
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               if (await _checkEmailDuplicate(
-                                                      _email.text) !=
+                                                      _email.text, _formKey) !=
                                                   false) {
                                                 value.email = _email.text;
                                                 Navigator.of(context).push(

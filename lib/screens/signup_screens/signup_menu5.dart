@@ -45,11 +45,6 @@ class _SignupMenuFifthState extends State<SignupMenuFifth> {
         'birthDate': context.read<SignupProvider>().birthDate
       });
 
-      print(context.read<SignupProvider>().email);
-      print(context.read<SignupProvider>().name);
-      print(context.read<SignupProvider>().phoneNumber);
-      print(context.read<SignupProvider>().birthDate);
-      print('비밀번호 486 : ' + context.read<SignupProvider>().password);
       Response response = await dio.post(_base + '/auth/signup',
           data: param, options: Options(contentType: Headers.jsonContentType));
 
