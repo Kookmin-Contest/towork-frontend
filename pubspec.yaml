@@ -52,6 +52,7 @@ dependencies:
   get: ^4.6.5
   flutter_spinkit: ^5.2.0
   flutter_screenutil: ^5.8.4
+  image_picker: ^1.0.2
 
 dev_dependencies:
   flutter_test:
