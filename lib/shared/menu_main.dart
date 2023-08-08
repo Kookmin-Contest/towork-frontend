@@ -15,27 +15,37 @@ import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class Main extends StatelessWidget {
+  static final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.light);
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(411.42857142857144, 867.4285714285714),
       builder: (context, child) {
-        return MaterialApp(
-          title: '메인 메뉴',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-              primarySwatch: Colors.blue,
-              brightness: Brightness.light,
-              fontFamily: 'NotoSansKr',
-              visualDensity: VisualDensity.adaptivePlatformDensity),
-          builder: (context, child) {
-            return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: child!);
+        return ValueListenableBuilder<ThemeMode>(
+          valueListenable: themeNotifier,
+          builder: (context, ThemeMode currentMode, child) {
+            return MaterialApp(
+              title: '메인 메뉴',
+              debugShowCheckedModeBanner: false,
+              darkTheme: ThemeData.dark(),
+              themeMode: currentMode,
+              theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  brightness: Brightness.light,
+                  fontFamily: 'NotoSansKr',
+                  visualDensity: VisualDensity.adaptivePlatformDensity),
+              builder: (context, child) {
+                return MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: child!);
+              },
+              home: MultiProvider(providers: [
+                ChangeNotifierProvider(create: (_) => MemberProvider()),
+              ], child: MainMenu()),
+            );
           },
-          home: MultiProvider(providers: [
-            ChangeNotifierProvider(create: (_) => MemberProvider()),
-          ], child: MainMenu()),
         );
       },
     );
@@ -62,12 +72,12 @@ final List<NavigationRoute> _routes = [
       name: "커뮤니티",
       icon: Icon(Icons.chat_bubble),
       page: CommunityMenu(),
-      appbar: PlainAppbar()),
+      appbar: PlainAppbar(title: '커뮤니티')),
   new NavigationRoute(
       name: "마이페이지",
       icon: Icon(Icons.perm_identity_rounded),
       page: MypageMenu(),
-      appbar: PlainAppbar()),
+      appbar: PlainAppbar(title: '마이페이지')),
   new NavigationRoute(
       name: "홈",
       icon: Icon(Icons.home),
@@ -77,12 +87,14 @@ final List<NavigationRoute> _routes = [
       name: "요청",
       icon: Icon(Icons.document_scanner_outlined),
       page: AlertMenu(),
-      appbar: PlainAppbar()),
+      appbar: PlainAppbar(title: '요청')),
   new NavigationRoute(
       name: "환경설정",
       icon: Icon(Icons.settings),
       page: SettingMenu(),
-      appbar: PlainAppbar())
+      appbar: PlainAppbar(
+        title: '환경설정',
+      ))
 ];
 
 class MainMenu extends StatefulWidget {

@@ -5,6 +5,7 @@ import 'package:gotowork/screens/login_screens/login_menu.dart';
 import 'package:gotowork/screens/signup_screens/signup_choose.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu1.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu2.dart';
+import 'package:gotowork/shared/menu_main.dart';
 import 'package:provider/provider.dart';
 
 void main() {

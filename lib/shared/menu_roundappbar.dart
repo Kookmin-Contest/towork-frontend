@@ -44,6 +44,12 @@ class _RoundAppBarState extends State<RoundAppBar> {
         response = await dio.get(url);
         context.read<MemberProvider>().username = response.data['name'];
         context.read<MemberProvider>().email = response.data['email'];
+        context.read<MemberProvider>().phoneNumber =
+            response.data['phoneNumber'];
+        context.read<MemberProvider>().createDateTime =
+            response.data['createDateTime'];
+        context.read<MemberProvider>().memberId = response.data['memberId'];
+        context.read<MemberProvider>().birthDate = response.data['birthDate'];
       } on DioError catch (e) {
         print(e);
       }
