@@ -10,6 +10,8 @@ import 'package:gotowork/screens/login_screens/login_menu.dart';
 
 Future<Dio> dioHandler(BuildContext context, String requestUrl) async {
   var dio = Dio(BaseOptions(connectTimeout: 5000, receiveTimeout: 5000));
+  final _base =
+      'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
 
   dio.interceptors.clear();
 
@@ -100,7 +102,7 @@ Future<Dio> dioHandler(BuildContext context, String requestUrl) async {
           var param = jsonEncode({'refreshToken': data['refreshToken']});
 
           Response response = await refreshDio.post(
-            'http://10.0.2.2:8080/auth/reissue',
+            _base + '/auth/reissue',
             data: param,
             options: Options(contentType: Headers.jsonContentType),
           );

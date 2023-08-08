@@ -42,6 +42,24 @@ class _JoinWorkspaceState extends State<JoinWorkspace> {
       builder: (context, child) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            titleSpacing: 0,
+            automaticallyImplyLeading: false,
+            title: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30.w),
+              child: Text(
+                '회사 선택',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF393939),
+                ),
+              ),
+            ),
+            centerTitle: true,
+            backgroundColor: Color(0xFFF9F9F9),
+            elevation: 0,
+          ),
           body: CustomScrollView(
             slivers: [
               SliverFillRemaining(
@@ -52,10 +70,7 @@ class _JoinWorkspaceState extends State<JoinWorkspace> {
                   child: Container(
                     color: Color(0xFFF9F9F9),
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 30.h,
-                        horizontal: 30.w,
-                      ),
+                      padding: EdgeInsets.fromLTRB(20.0.w, 10.0.h, 20.0.w, 0.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -75,32 +90,16 @@ class _JoinWorkspaceState extends State<JoinWorkspace> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '나의 ',
-                                        style: TextStyle(
-                                          fontSize: 24.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        '직장',
-                                        style: TextStyle(
-                                            fontSize: 24.sp,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF60ADDA)),
-                                      ),
-                                      Text(
-                                        '을 만들어보세요.',
-                                        style: TextStyle(
-                                          fontSize: 24.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
+                                  SizedBox(
+                                    height: 10.0.h,
                                   ),
+                                  Text(
+                                    '오늘의 출근',
+                                    style: TextStyle(
+                                        fontSize: 24.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color(0xFF60ADDA)),
+                                  )
                                 ],
                               ),
                             ),
@@ -112,35 +111,113 @@ class _JoinWorkspaceState extends State<JoinWorkspace> {
                             child: AnimatedOpacity(
                               opacity: button_visible ? 1 : 0,
                               duration: Duration(seconds: 1),
-                              child: Row(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ElevatedButtonTheme(
-                                    data: ElevatedButtonThemeData(),
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Main(),
+                                  Card(
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0.r)),
+                                    child: InkWell(
+                                      borderRadius:
+                                          BorderRadius.circular(8.0.r),
+                                      onTap: () {
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Main(),
+                                          ),
+                                          (route) => false,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(20.0.sp),
+                                        child: Container(
+                                          width: 120.0.w,
+                                          height: 120.0.h,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0.r),
+                                            color: Colors.transparent,
+                                          ),
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '직장에 합류하기',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 17.0.sp),
+                                                ),
+                                                SizedBox(
+                                                  height: 15.0.h,
+                                                ),
+                                                Icon(
+                                                  Icons.input,
+                                                  size: 30.sp,
+                                                )
+                                              ],
                                             ),
-                                            (route) => false,
-                                          );
-                                        },
-                                        child: Text('직장에 합류하기')),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(
-                                    width: 10.0,
+                                    height: 10.0.h,
                                   ),
-                                  ElevatedButtonTheme(
-                                    data: ElevatedButtonThemeData(),
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                              horizontalSlidingRoute(
-                                                  NewWorkSpaceScreen()));
-                                        },
-                                        child: Text('직장 만들기~ ㅋㅋ')),
+                                  Card(
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0.r)),
+                                    child: InkWell(
+                                      borderRadius:
+                                          BorderRadius.circular(8.0.r),
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            horizontalSlidingRoute(
+                                                NewWorkSpaceScreen()));
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(20.0.sp),
+                                        child: Container(
+                                          width: 120.0.w,
+                                          height: 120.0.h,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0.r),
+                                            color: Colors.transparent,
+                                          ),
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '회사 만들기',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 17.0.sp),
+                                                ),
+                                                SizedBox(
+                                                  height: 15.0.h,
+                                                ),
+                                                Icon(
+                                                  Icons.add_business_rounded,
+                                                  size: 30.sp,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
