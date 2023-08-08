@@ -21,7 +21,30 @@ class _SettingMenuState extends State<SettingMenu> {
                   width: 390.0.w,
                   height: 150.0.h,
                   decoration: BoxDecoration(
-                      border: Border.all(width: 1.0, color: Colors.grey)),
+                      border: Border.all(width: 1.0.w, color: Colors.grey),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.r),
+                      )),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(10.0.w, 8.0.h, 10.0.w, 8.0.h),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: AssetImage("assets/logo.png"),
+                          backgroundColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 390.0.w,
+                  height: 150.0.h,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1.0.w, color: Colors.grey),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.r),
+                      )),
                   child: Text('test'),
                 ),
               ],
