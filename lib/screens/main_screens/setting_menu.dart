@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingMenu extends StatefulWidget {
   const SettingMenu({super.key});
@@ -17,6 +18,8 @@ class _SettingMenuState extends State<SettingMenu> {
             child: Column(
               children: [
                 Container(
+                  width: 390.0.w,
+                  height: 150.0.h,
                   decoration: BoxDecoration(
                       border: Border.all(width: 1.0, color: Colors.grey)),
                   child: Text('test'),

@@ -7,6 +7,7 @@ import 'package:gotowork/screens/main_screens/home_menu.dart';
 import 'package:gotowork/screens/main_screens/mypage_menu.dart';
 import 'package:gotowork/screens/main_screens/setting_menu.dart';
 import 'package:gotowork/screens/workspace_screens/new_workspace_screen.dart';
+import 'package:gotowork/shared/helper/animatedRouter.dart';
 import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
 import 'package:gotowork/shared/helper/animatedIndexedStack.dart';
@@ -194,13 +195,9 @@ class _MainMenuState extends State<MainMenu>
                 style: TextStyle(),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NewWorkSpaceScreen(),
-                    fullscreenDialog: true,
-                  ),
-                );
+                Navigator.of(context).pop();
+                Navigator.of(context)
+                    .push(horizontalSlidingRoute(NewWorkSpaceScreen()));
               },
             ),
           ],
