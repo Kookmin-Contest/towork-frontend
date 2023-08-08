@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class NewWorkSpaceScreen extends StatelessWidget {
-  const NewWorkSpaceScreen({super.key});
+class GenWorkSpaceScreen1 extends StatelessWidget {
+  const GenWorkSpaceScreen1({super.key});
 
   @override
   Widget build(BuildContext context) {

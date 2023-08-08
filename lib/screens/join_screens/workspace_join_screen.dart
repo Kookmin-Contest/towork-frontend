@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gotowork/screens/workspace_screens/new_workspace_screen.dart';
+import 'package:gotowork/screens/workspace_screens/gen_workspace_screen1.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
 import 'package:gotowork/shared/menu_main.dart';
 
@@ -181,7 +181,7 @@ class _JoinWorkspaceState extends State<JoinWorkspace> {
                                       onTap: () {
                                         Navigator.of(context).push(
                                             horizontalSlidingRoute(
-                                                NewWorkSpaceScreen()));
+                                                GenWorkSpaceScreen1()));
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.all(20.0.sp),
