@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gotowork/screens/workspace_screens/gen_workspace_screen2.dart';
+import 'package:gotowork/shared/helper/animatedRouter.dart';
 
 class GenWorkSpaceScreen1 extends StatelessWidget {
   const GenWorkSpaceScreen1({super.key});
@@ -14,7 +16,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
         title: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.w),
           child: Text(
-            '회원가입',
+            '새 Workspace',
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w700,
@@ -154,7 +156,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(right: 15.w),
                                 child: Text(
-                                  '1/5',
+                                  '1/3',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 16.sp,
@@ -167,7 +169,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                 height: 10.h,
                               ),
                               LinearProgressIndicator(
-                                value: 0.3,
+                                value: 0.3333,
                                 backgroundColor: Color(0x80BABBBA),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   Color(0xFF60ADDA),
@@ -181,7 +183,11 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                 backgroundColor: Color(0xFF60ADDA),
                                 radius: 26.sp,
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        horizontalSlidingRoute(
+                                            GenWorkSpaceScreen2()));
+                                  },
                                   icon: Icon(
                                     Icons.arrow_forward_ios_rounded,
                                     color: Color(0xFFFFFFFF),
