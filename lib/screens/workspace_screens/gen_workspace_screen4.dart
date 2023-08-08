@@ -9,9 +9,6 @@ class GenWorkSpaceScreen4 extends StatefulWidget {
 }
 
 class _GenWorkSpaceScreen4State extends State<GenWorkSpaceScreen4> {
-  String? dropdownValue1;
-  String? dropdownValue2;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

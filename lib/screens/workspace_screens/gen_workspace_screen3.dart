@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gotowork/screens/workspace_screens/gen_workspace_screen4.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class GenWorkSpaceScreen3 extends StatefulWidget {
   const GenWorkSpaceScreen3({super.key});
@@ -11,8 +12,15 @@ class GenWorkSpaceScreen3 extends StatefulWidget {
 }
 
 class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
-  String? dropdownValue1;
-  String? dropdownValue2;
+  final ImagePicker _picker = ImagePicker();
+  XFile? image;
+
+  void getImageFromGallery(ImageSource source) async {
+    final load = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      image = load;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +136,9 @@ class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
                             Icons.add_circle_outline_rounded,
                             color: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            getImageFromGallery(ImageSource.gallery);
+                          },
                         ),
                       ),
                       SizedBox(
