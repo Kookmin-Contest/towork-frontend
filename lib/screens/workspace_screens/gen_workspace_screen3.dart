@@ -1,8 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gotowork/providers/provider/workspace_provider.dart';
 import 'package:gotowork/screens/workspace_screens/gen_workspace_screen4.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class GenWorkSpaceScreen3 extends StatefulWidget {
   const GenWorkSpaceScreen3({super.key});
@@ -14,12 +19,16 @@ class GenWorkSpaceScreen3 extends StatefulWidget {
 class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
   final ImagePicker _picker = ImagePicker();
   XFile? image;
+  var base64Image;
 
   void getImageFromGallery(ImageSource source) async {
     final load = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       image = load;
     });
+    final bytes = File(image!.path).readAsBytesSync();
+    base64Image = "data:image/png;base64," + base64Encode(bytes);
+    print("base64Image : $base64Image");
   }
 
   @override
@@ -144,6 +153,20 @@ class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
                       SizedBox(
                         height: 8.h,
                       ),
+                      image == null
+                          ? Container(
+                              height: 200.h,
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                              ),
+                            )
+                          : Container(
+                              height: 200.h,
+                              child: Image.file(File(image!.path)),
+                            ),
+                      SizedBox(
+                        height: 8.h,
+                      ),
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 30.h),
@@ -182,11 +205,29 @@ class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
                                 radius: 26.sp,
                                 child: IconButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      horizontalSlidingRoute(
-                                        GenWorkSpaceScreen4(),
-                                      ),
-                                    );
+                                    if (base64Image != null) {
+                                      context
+                                          .read<WorkspaceProvider>()
+                                          .representImage = base64Image;
+
+                                      Navigator.of(context).push(
+                                        horizontalSlidingRoute(
+                                          GenWorkSpaceScreen4(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text('대표 이미지를 등록해주세요.'),
+                                          duration: Duration(seconds: 5),
+                                          action: SnackBarAction(
+                                            label: '닫기',
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      );
+                                    }
                                   },
                                   icon: Icon(
                                     Icons.arrow_forward_ios_rounded,

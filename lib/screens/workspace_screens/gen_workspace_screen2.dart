@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gotowork/providers/provider/workspace_provider.dart';
 import 'package:gotowork/screens/workspace_screens/gen_workspace_screen3.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
+import 'package:provider/provider.dart';
 
 class GenWorkSpaceScreen2 extends StatefulWidget {
   const GenWorkSpaceScreen2({super.key});
@@ -341,11 +343,33 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                                 radius: 26.sp,
                                 child: IconButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      horizontalSlidingRoute(
-                                        GenWorkSpaceScreen3(),
-                                      ),
-                                    );
+                                    if (dropdownValue1 == null ||
+                                        dropdownValue2 == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text('모든 항목을 선택해주세요.'),
+                                          duration: Duration(seconds: 5),
+                                          action: SnackBarAction(
+                                            label: '닫기',
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      context
+                                          .read<WorkspaceProvider>()
+                                          .jobCategory1 = dropdownValue1!;
+                                      context
+                                          .read<WorkspaceProvider>()
+                                          .jobCategory2 = dropdownValue2!;
+
+                                      Navigator.of(context).push(
+                                        horizontalSlidingRoute(
+                                          GenWorkSpaceScreen3(),
+                                        ),
+                                      );
+                                    }
                                   },
                                   icon: Icon(
                                     Icons.arrow_forward_ios_rounded,

@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gotowork/providers/provider/workspace_provider.dart';
 import 'package:gotowork/screens/workspace_screens/gen_workspace_screen2.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
+import 'package:provider/provider.dart';
 
-class GenWorkSpaceScreen1 extends StatelessWidget {
+class GenWorkSpaceScreen1 extends StatefulWidget {
   const GenWorkSpaceScreen1({super.key});
+
+  @override
+  State<GenWorkSpaceScreen1> createState() => _GenWorkSpaceScreen1State();
+}
+
+class _GenWorkSpaceScreen1State extends State<GenWorkSpaceScreen1> {
+  TextEditingController _companyName = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -109,40 +119,50 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                       ),
                       SizedBox(
                         width: 400.w,
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
-                            filled: true,
-                            fillColor: Color(0xFFFFFFFF),
-                            focusColor: Color(0xFFFFFFFF),
-                            hintText: '회사명을 입력하세요.',
-                            hintStyle: TextStyle(
-                              fontSize: 14,
+                        child: Form(
+                          key: _formKey,
+                          child: TextFormField(
+                            controller: _companyName,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "회사명을 입력해주세요.";
+                              }
+                              return null;
+                            },
+                            style: TextStyle(
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w400,
-                              color: Color(0xFFDADADA),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFBABBBA),
-                                width: 1.w,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
+                              filled: true,
+                              fillColor: Color(0xFFFFFFFF),
+                              focusColor: Color(0xFFFFFFFF),
+                              hintText: '회사명을 입력하세요.',
+                              hintStyle: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xFFDADADA),
                               ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.r),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFBABBBA),
+                                  width: 1.w,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8.r),
+                                ),
                               ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFBABBBA),
-                                width: 1.w,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.r),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFBABBBA),
+                                  width: 1.w,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8.r),
+                                ),
                               ),
                             ),
                           ),
@@ -186,11 +206,17 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                 radius: 26.sp,
                                 child: IconButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                      horizontalSlidingRoute(
-                                        GenWorkSpaceScreen2(),
-                                      ),
-                                    );
+                                    if (_formKey.currentState!.validate()) {
+                                      context
+                                          .read<WorkspaceProvider>()
+                                          .companyName = _companyName.text;
+
+                                      Navigator.of(context).push(
+                                        horizontalSlidingRoute(
+                                          GenWorkSpaceScreen2(),
+                                        ),
+                                      );
+                                    }
                                   },
                                   icon: Icon(
                                     Icons.arrow_forward_ios_rounded,
@@ -198,7 +224,7 @@ class GenWorkSpaceScreen1 extends StatelessWidget {
                                     size: 32.sp,
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
