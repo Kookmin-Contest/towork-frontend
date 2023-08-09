@@ -7,6 +7,7 @@ import 'package:gotowork/screens/admin_screens/adminChoose_menu.dart';
 import 'package:gotowork/screens/setting_screens/changePassword_menu.dart';
 import 'package:gotowork/screens/setting_screens/changeProfile_menu.dart';
 import 'package:gotowork/shared/menu_main.dart';
+import 'package:gotowork/widgets/emailSender.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -18,9 +19,12 @@ class SettingMenu extends StatefulWidget {
 }
 
 class _SettingMenuState extends State<SettingMenu> {
-  void _sendEmail() async {
+  void _sendEmail(BuildContext context) async {
+    EmailSender emailSender = new EmailSender();
+    String body = await emailSender.getEmailBody(context);
+
     final Email email = Email(
-      body: '',
+      body: body,
       subject: '[오늘의 출근 문의]',
       recipients: ['mclub901@gmail.com'],
       cc: [],
@@ -340,7 +344,7 @@ class _SettingMenuState extends State<SettingMenu> {
                             ListTile(
                               title: Text('고객센터'),
                               onTap: () {
-                                _sendEmail();
+                                _sendEmail(context);
                               },
                               dense: true,
                               visualDensity: VisualDensity(vertical: 1.0.h),
