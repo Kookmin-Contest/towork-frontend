@@ -31,28 +31,50 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # ios 스타일 아이콘
   cupertino_icons: ^1.0.2
+  # splash screen을 만들기 위한 패캐지
   flutter_native_splash: ^2.3.1
+  # 자동로그인 및 토큰을 담아둘 local 저장소 패캐지
   flutter_secure_storage: ^8.0.0
+  # Toast 메세지를 표시하기 위한 패캐지
   fluttertoast: ^8.0.8
+  # 소셜 로그인 버튼 쉽게 만들기 (지울예정)
   flutter_signin_button: ^2.0.0
+  # 달력 패캐지
   table_calendar: ^3.0.8
+  # 다국어 처리 패캐지
   intl: ^0.17.0
+  # 클라이언트 DB를 ORM으로 사용하기 위한 패캐지
   drift: ^2.3.0
+  # Http 요청을 보내기 위한 패캐지 (http 패캐지 사용 x)
   dio: ^4.0.6
+  # 소셜 로그인 웹 인증을 위한 패캐지
   flutter_web_auth: ^0.5.0
+  # 클라이언트 고유 식별자 생성 패캐지
   uuid: ^3.0.4
+  # 이건 뭐냐? 첨 보네. 넣은 사람 설명좀 써주셈
   google_fonts: ^5.1.0
+  # url을 쉽게 열기 위한 패캐지
   url_launcher: ^6.1.12
+  # state 관리를 용이하게 해주는 패캐지
   provider: ^6.0.5
+  # 앱내에서 webview가 가능하게 해주는 패캐지
   webview_flutter: ^4.2.2
+  # 네트워크 연결상태 체크 패캐지
   connectivity_plus: ^4.0.1
+  # state 관리를 용이하게 해주는 패캐지
   get: ^4.6.5
+  # 로딩화면 여러가지 이쁜거 추가해주는 패캐지
   flutter_spinkit: ^5.2.0
+  # 기종에 따른 화면비율 조정해주는 패캐지
   flutter_screenutil: ^5.8.4
+  # 이메일 보내기 패캐지
   flutter_email_sender: ^6.0.1
+  # 생체인식 패캐지
+  local_auth: ^2.1.6
+  # 흐르는 글씨
+  marquee: ^2.2.3
 
 dev_dependencies:
   flutter_test:
