@@ -69,6 +69,8 @@ dependencies:
   flutter_spinkit: ^5.2.0
   # 기종에 따른 화면비율 조정해주는 패캐지
   flutter_screenutil: ^5.8.4
+  # 갤러리에서 이미지 업로드 하기 위한 패키지
+  image_picker: ^1.0.2
   # 이메일 보내기 패캐지
   flutter_email_sender: ^6.0.1
   # 생체인식 패캐지
@@ -78,7 +80,6 @@ dependencies:
   # 디바이스 정보 받아오기
   device_info_plus: ^9.0.3
   package_info_plus: ^4.1.0
-
 
 dev_dependencies:
   flutter_test:
