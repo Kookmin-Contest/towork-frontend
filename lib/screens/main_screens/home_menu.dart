@@ -57,16 +57,8 @@ class _HomeMenuState extends State<HomeMenu> {
                             right: 0,
                             bottom: 0,
                             child: ElevatedButton(
-                              onPressed: () async {
-                                await storage.delete(key: 'login');
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MyApp()),
-                                  (route) => false,
-                                );
-                              },
-                              child: Text('임시 로그아웃 버튼'),
+                              onPressed: () async {},
+                              child: Text('출근'),
                             ),
                           ),
                         ],
