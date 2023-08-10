@@ -2,11 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gotowork/providers/provider/member_provider.dart';
-import 'package:gotowork/screens/login_screens/login_menu.dart';
-import 'package:gotowork/shared/helper/dio_handler.dart';
 import 'package:provider/provider.dart';
 
 // 끝이 둥근 Appbar 만들어둔겁니다. 필요없으면 지울 예정
@@ -21,46 +17,8 @@ class RoundAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _RoundAppBarState extends State<RoundAppBar> {
-  static final _storage = FlutterSecureStorage();
-  static final _base =
-      'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      _asyncMethod();
-    });
-  }
-
-  _asyncMethod() async {
-    dynamic userinfo = await _storage.read(key: 'token');
-
-    if (userinfo != null) {
-      String url = _base + '/members/info';
-      var dio = await dioHandler(context, url);
-      dynamic response = null;
-      try {
-        response = await dio.get(url);
-        context.read<MemberProvider>().username = response.data['name'];
-        context.read<MemberProvider>().email = response.data['email'];
-        context.read<MemberProvider>().phoneNumber =
-            response.data['phoneNumber'];
-        context.read<MemberProvider>().createDateTime =
-            response.data['createDateTime'];
-        context.read<MemberProvider>().memberId = response.data['memberId'];
-        context.read<MemberProvider>().birthDate = response.data['birthDate'];
-      } on DioError catch (e) {
-        print(e);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width.toString() +
-        ', ' +
-        MediaQuery.of(context).size.height.toString());
     return AppBar(
       title: Text('메인 화면'),
       centerTitle: true,

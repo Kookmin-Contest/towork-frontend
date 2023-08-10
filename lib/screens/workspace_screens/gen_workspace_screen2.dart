@@ -72,7 +72,7 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                         height: 100.h,
                       ),
                       Text(
-                        '빠르고, 간편하게',
+                        '당신은 어떤 회사 입니까?',
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w500,
@@ -81,21 +81,21 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                       Row(
                         children: [
                           Text(
-                            '나의 ',
+                            '내 직장의 ',
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
-                            '직장',
+                            '업직종',
                             style: TextStyle(
                                 fontSize: 24.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF60ADDA)),
                           ),
                           Text(
-                            '을 만들어보세요.',
+                            '을 선택해주세요.',
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w500,
@@ -365,9 +365,7 @@ class _GenWorkSpaceScreen2State extends State<GenWorkSpaceScreen2> {
                                           .jobCategory2 = dropdownValue2!;
 
                                       Navigator.of(context).push(
-                                        horizontalSlidingRoute(
-                                          GenWorkSpaceScreen3(),
-                                        ),
+                                        fadeRoute(GenWorkSpaceScreen3()),
                                       );
                                     }
                                   },

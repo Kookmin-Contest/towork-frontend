@@ -87,7 +87,7 @@ class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
                         height: 100.h,
                       ),
                       Text(
-                        '빠르고, 간편하게',
+                        '로고는 회사의 간판',
                         style: TextStyle(
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w500,
@@ -96,21 +96,21 @@ class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
                       Row(
                         children: [
                           Text(
-                            '나의 ',
+                            '직장의 ',
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           Text(
-                            '직장',
+                            '로고',
                             style: TextStyle(
                                 fontSize: 24.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF60ADDA)),
                           ),
                           Text(
-                            '을 만들어보세요.',
+                            '를 선택해주세요.',
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w500,
@@ -211,9 +211,7 @@ class _GenWorkSpaceScreen3State extends State<GenWorkSpaceScreen3> {
                                           .representImage = base64Image;
 
                                       Navigator.of(context).push(
-                                        horizontalSlidingRoute(
-                                          GenWorkSpaceScreen4(),
-                                        ),
+                                        fadeRoute(GenWorkSpaceScreen4()),
                                       );
                                     } else {
                                       ScaffoldMessenger.of(context)

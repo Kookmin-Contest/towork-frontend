@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:gotowork/main.dart';
+import 'package:gotowork/providers/provider/member_provider.dart';
+import 'package:gotowork/shared/helper/dio_handler.dart';
 import 'package:gotowork/widgets/calendar.dart';
+import 'package:provider/provider.dart';
 
 class HomeMenu extends StatefulWidget {
   const HomeMenu({super.key});
@@ -10,9 +13,6 @@ class HomeMenu extends StatefulWidget {
 }
 
 class _HomeMenuState extends State<HomeMenu> {
-  static final storage = FlutterSecureStorage();
-  dynamic userInfo = '';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

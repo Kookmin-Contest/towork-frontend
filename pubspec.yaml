@@ -79,6 +79,7 @@ dependencies:
   marquee: ^2.2.3
   # 디바이스 정보 받아오기
   device_info_plus: ^9.0.3
+  # 앱 정보 받아오기
   package_info_plus: ^4.1.0
 
 dev_dependencies:
