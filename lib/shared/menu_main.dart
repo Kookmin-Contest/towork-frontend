@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gotowork/providers/provider/member_provider.dart';
 import 'package:gotowork/screens/main_screens/alert_menu.dart';
 import 'package:gotowork/screens/main_screens/community_menu.dart';
@@ -8,6 +10,7 @@ import 'package:gotowork/screens/main_screens/mypage_menu.dart';
 import 'package:gotowork/screens/main_screens/setting_menu.dart';
 import 'package:gotowork/screens/workspace_screens/gen_workspace_screen1.dart';
 import 'package:gotowork/shared/helper/animatedRouter.dart';
+import 'package:gotowork/shared/helper/dio_handler.dart';
 import 'package:gotowork/shared/menu_appbar.dart';
 import 'package:gotowork/shared/menu_roundappbar.dart';
 import 'package:gotowork/shared/helper/animatedIndexedStack.dart';
@@ -129,20 +132,26 @@ class _MainMenuState extends State<MainMenu>
     super.initState();
 
     // 인터넷 연결 확인
-    _subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) async {
-      if (result == ConnectivityResult.none) {
-        _hasConnection = false;
-        await Future.delayed(Duration(seconds: 1));
-        if (_hasConnection == false && _onetime == false) {
-          _onetime = true;
-          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    _subscription = Connectivity().onConnectivityChanged.listen(
+      (ConnectivityResult result) async {
+        if (result == ConnectivityResult.none) {
+          _hasConnection = false;
+          await Future.delayed(Duration(seconds: 1));
+          if (_hasConnection == false && _onetime == false) {
+            _onetime = true;
+            ScaffoldMessenger.of(context).showSnackBar(snackbar);
+          }
+        } else {
+          _hasConnection = true;
+          _onetime = false;
         }
-      } else {
-        _hasConnection = true;
-        _onetime = false;
-      }
+      },
+    );
+
+    _getMemberWorkspace();
+    // 사용자 정보 받아오기
+    Future.delayed(Duration.zero, () {
+      _getMemberInformation();
     });
   }
 
@@ -152,11 +161,49 @@ class _MainMenuState extends State<MainMenu>
     _subscription.cancel();
   }
 
+  // 사용자 정보 받아오기
+  static final _storage = FlutterSecureStorage();
+  dynamic userInfo = '';
+
+  static final _base =
+      'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
+
+  _getMemberInformation() async {
+    dynamic userinfo = await _storage.read(key: 'token');
+
+    if (userinfo != null) {
+      String url = _base + '/members/info';
+      var dio = await dioHandler(context, url);
+      dynamic response = null;
+      try {
+        response = await dio.get(url);
+        context.read<MemberProvider>().username = response.data['name'];
+        context.read<MemberProvider>().email = response.data['email'];
+        context.read<MemberProvider>().phoneNumber =
+            response.data['phoneNumber'];
+        context.read<MemberProvider>().createDateTime =
+            response.data['createDateTime'];
+        context.read<MemberProvider>().memberId = response.data['memberId'];
+        context.read<MemberProvider>().birthDate = response.data['birthDate'];
+      } on DioError catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  // 워크스페이스 목록 받아오기
+  static int workspaceCount = 5;
+  static var items = ['워크스페이스1', '워크스페이스2', '워크스페이스3', '워크스페이스4'];
+
+  _getMemberWorkspace() async {
+    String memberUrl = _base + '/members/workspaces';
+    String workspaceUrl = _base + '/workspaces';
+    var dio = await dioHandler(context, memberUrl);
+    dynamic response = null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width.toString() +
-        ', ' +
-        MediaQuery.of(context).size.height.toString());
     return Scaffold(
       key: _scaffoldKey,
       appBar: _indexedAppBar,
@@ -165,52 +212,80 @@ class _MainMenuState extends State<MainMenu>
         children: _routes.map((route) => route.page).toList(),
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
-            UserAccountsDrawerHeader(
-              accountEmail: Text(context.watch<MemberProvider>().email),
-              accountName:
-                  Text(context.watch<MemberProvider>().username + "님 반갑습니다!"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("assets/logo.png"),
-                backgroundColor: Colors.white,
-              ),
-              onDetailsPressed: () {},
-              decoration: BoxDecoration(
-                color: const Color(0xff9dcff7),
+            SizedBox(
+              height: 220.h,
+              child: UserAccountsDrawerHeader(
+                accountEmail: Text(context.watch<MemberProvider>().email,
+                    style: TextStyle(fontSize: 14.sp),
+                    overflow: TextOverflow.ellipsis),
+                accountName: Text(
+                  context.watch<MemberProvider>().username + "님 반갑습니다!",
+                  style: TextStyle(fontSize: 14.sp),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage("assets/logo.png"),
+                  backgroundColor: Colors.white,
+                ),
+                onDetailsPressed: () {},
+                decoration: BoxDecoration(
+                  color: const Color(0xff9dcff7),
+                ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(15.w, 10.h, 0, 10.h),
-              child: Text(
-                'WorkSpace',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0.sp),
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: workspaceCount,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Container(
+                      padding: EdgeInsets.fromLTRB(15.w, 10.h, 0, 30.h),
+                      child: Text(
+                        'WorkSpace',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15.0.sp),
+                      ),
+                    );
+                  } else if (index == 1) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 10.0.h),
+                      child: ListTile(
+                        title: Text(
+                          '새 워크스페이스 만들기',
+                          style: TextStyle(),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(
+                              horizontalSlidingRoute(GenWorkSpaceScreen1()));
+                        },
+                        dense: true,
+                        visualDensity: VisualDensity(vertical: 4.0.h),
+                      ),
+                    );
+                  } else {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: AssetImage('assets/logo.png'),
+                        backgroundColor: Colors.white,
+                      ),
+                      title: Text(
+                        items[index - 2],
+                        style: TextStyle(fontSize: 16.0.sp),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: 4.0.h),
+                    );
+                  }
+                },
               ),
-            ),
-            ListTile(
-              title: Text('워크스페이스 1'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('워크스페이스 2'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text(
-                '새 워크스페이스 만들기',
-                style: TextStyle(),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context)
-                    .push(horizontalSlidingRoute(GenWorkSpaceScreen1()));
-              },
             ),
           ],
         ),

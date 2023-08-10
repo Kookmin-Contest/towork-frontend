@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gotowork/providers/controller/loadingController.dart';
 import 'package:gotowork/providers/provider/workspace_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:get/get.dart' as gx;
 
 class GenWorkSpaceScreen4 extends StatefulWidget {
   const GenWorkSpaceScreen4({super.key});
@@ -17,6 +20,7 @@ class GenWorkSpaceScreen4 extends StatefulWidget {
 class _GenWorkSpaceScreen4State extends State<GenWorkSpaceScreen4> {
   TextEditingController _introduction = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _isLoadingController = gx.Get.put(IsLoadingController());
 
   String _base =
       'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
@@ -100,189 +104,219 @@ class _GenWorkSpaceScreen4State extends State<GenWorkSpaceScreen4> {
       body: CustomScrollView(
         slivers: [
           SliverFillRemaining(
-            child: GestureDetector(
-              onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
-              child: Container(
-                color: Color(0xFFF9F9F9),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 30.h,
-                    horizontal: 30.w,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 100.h,
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  child: Container(
+                    color: Color(0xFFF9F9F9),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 30.h,
+                        horizontal: 30.w,
                       ),
-                      Text(
-                        '빠르고, 간편하게',
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Row(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(
+                            height: 100.h,
+                          ),
                           Text(
-                            '나의 ',
+                            '마지막이에요!',
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          Text(
-                            '직장',
-                            style: TextStyle(
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF60ADDA)),
-                          ),
-                          Text(
-                            '을 만들어보세요.',
-                            style: TextStyle(
-                              fontSize: 24.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 70.h,
-                      ),
-                      Text(
-                        '소개',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8.h,
-                      ),
-                      SizedBox(
-                        width: 400.w,
-                        child: Form(
-                          key: _formKey,
-                          child: TextFormField(
-                            controller: _introduction,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '소개를 작성해주세요.';
-                              }
-                              return null;
-                            },
-                            minLines: 8,
-                            maxLength: 250,
-                            maxLines: null,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
-                              filled: true,
-                              fillColor: Color(0xFFFFFFFF),
-                              focusColor: Color(0xFFFFFFFF),
-                              hintText: '소개는 250자 내로 작성해주세요.',
-                              hintStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFDADADA),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFFBABBBA),
-                                  width: 1.w,
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.r),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFFBABBBA),
-                                  width: 1.w,
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.r),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8.h,
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 30.h),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                          Row(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 15.w),
-                                child: Text(
-                                  '4/4',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF60ADDA),
-                                  ),
+                              Text(
+                                '당신의 직장을 ',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              SizedBox(
-                                height: 10.h,
+                              Text(
+                                '소개',
+                                style: TextStyle(
+                                    fontSize: 24.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF60ADDA)),
                               ),
-                              LinearProgressIndicator(
-                                value: 1,
-                                backgroundColor: Color(0x80BABBBA),
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Color(0xFF60ADDA),
+                              Text(
+                                '해주세요.',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                                minHeight: 2.0.h,
                               ),
-                              SizedBox(
-                                height: 20.h,
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Color(0xFF60ADDA),
-                                radius: 26.sp,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      context
-                                          .read<WorkspaceProvider>()
-                                          .introduction = _introduction.text;
-                                    }
-
-                                    if (await _createWorkspace() == true) {
-                                      Navigator.of(context)
-                                          .popUntil((route) => route.isFirst);
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: Color(0xFFFFFFFF),
-                                    size: 32.sp,
-                                  ),
-                                ),
-                              )
                             ],
                           ),
-                        ),
-                      )
-                    ],
+                          SizedBox(
+                            height: 70.h,
+                          ),
+                          Text(
+                            '소개',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          SizedBox(
+                            width: 400.w,
+                            child: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                controller: _introduction,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '소개를 작성해주세요.';
+                                  }
+                                  return null;
+                                },
+                                minLines: 8,
+                                maxLength: 250,
+                                maxLines: null,
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      12.w, 12.h, 12.w, 12.h),
+                                  filled: true,
+                                  fillColor: Color(0xFFFFFFFF),
+                                  focusColor: Color(0xFFFFFFFF),
+                                  hintText: '소개는 250자 내로 작성해주세요.',
+                                  hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xFFDADADA),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFBABBBA),
+                                      width: 1.w,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.r),
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xFFBABBBA),
+                                      width: 1.w,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8.r),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 30.h),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 15.w),
+                                    child: Text(
+                                      '4/4',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF60ADDA),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
+                                  ),
+                                  LinearProgressIndicator(
+                                    value: 1,
+                                    backgroundColor: Color(0x80BABBBA),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF60ADDA),
+                                    ),
+                                    minHeight: 2.0.h,
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
+                                  CircleAvatar(
+                                    backgroundColor: Color(0xFF60ADDA),
+                                    radius: 26.sp,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        _isLoadingController.isLoading = true;
+                                        if (_formKey.currentState!.validate()) {
+                                          context
+                                                  .read<WorkspaceProvider>()
+                                                  .introduction =
+                                              _introduction.text;
+                                        }
+
+                                        if (await _createWorkspace() == true) {
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
+                                          _isLoadingController.isLoading =
+                                              false;
+                                        }
+                                        _isLoadingController.isLoading = false;
+                                      },
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: Color(0xFFFFFFFF),
+                                        size: 32.sp,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                gx.Obx(
+                  () => Offstage(
+                    offstage: !_isLoadingController.isLoading,
+                    child: Stack(
+                      children: const <Widget>[
+                        Opacity(
+                          opacity: 0.5,
+                          child: ModalBarrier(
+                            dismissible: false,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Center(
+                          child: SpinKitFadingCircle(
+                            color: const Color(0xff60adda),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ],

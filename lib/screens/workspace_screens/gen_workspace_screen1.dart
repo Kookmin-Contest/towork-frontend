@@ -212,9 +212,7 @@ class _GenWorkSpaceScreen1State extends State<GenWorkSpaceScreen1> {
                                           .companyName = _companyName.text;
 
                                       Navigator.of(context).push(
-                                        horizontalSlidingRoute(
-                                          GenWorkSpaceScreen2(),
-                                        ),
+                                        fadeRoute(GenWorkSpaceScreen2()),
                                       );
                                     }
                                   },
