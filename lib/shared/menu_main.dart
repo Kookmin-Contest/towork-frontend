@@ -197,6 +197,7 @@ class _MainMenuState extends State<MainMenu>
   static int workspaceCount = 5;
   static var items = ['새엠소옹', '네엑쓰으은', 'CoponEat', 'Kor'];
   static late List<WorkspaceInfo> _workspaceInfo;
+  static bool workspaceError = false;
 
   _getMemberWorkspace() async {
     String memberUrl = _base + '/members/workspaces';
@@ -221,9 +222,15 @@ class _MainMenuState extends State<MainMenu>
 
       if (workspaces.length != 0) {
         param = param.substring(0, param.length - 1);
+        workspaceError = false;
+      } else {
+        workspaceCount = 3;
+        workspaceError = true;
       }
     } on DioError catch (e) {
       print(e);
+      workspaceCount = 3;
+      workspaceError = true;
     }
 
     workspaceUrl += param;
@@ -235,8 +242,11 @@ class _MainMenuState extends State<MainMenu>
       _workspaceInfo = response2.data.map<WorkspaceInfo>((parsedJson) {
         return WorkspaceInfo.fromJson(parsedJson);
       }).toList();
+      workspaceError = false;
     } on DioError catch (e) {
       print(e);
+      workspaceCount = 3;
+      workspaceError = true;
     }
   }
 
@@ -309,6 +319,11 @@ class _MainMenuState extends State<MainMenu>
                         dense: true,
                         visualDensity: VisualDensity(vertical: 4.0.h),
                       ),
+                    );
+                  } else if (workspaceError) {
+                    return ListTile(
+                      title: Text('서버에 오류 발생 ㅠㅠ'),
+                      onTap: () {},
                     );
                   } else {
                     return ListTile(
