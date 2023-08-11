@@ -6,6 +6,7 @@ import 'package:gotowork/providers/provider/member_provider.dart';
 import 'package:gotowork/screens/admin_screens/adminChoose_menu.dart';
 import 'package:gotowork/screens/setting_screens/changePassword_menu.dart';
 import 'package:gotowork/screens/setting_screens/changeProfile_menu.dart';
+import 'package:gotowork/screens/setting_screens/checkPassword_menu.dart';
 import 'package:gotowork/shared/menu_main.dart';
 import 'package:gotowork/widgets/emailSender.dart';
 import 'package:provider/provider.dart';
@@ -237,7 +238,7 @@ class _SettingMenuState extends State<SettingMenu> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => changePassword(),
+                                    builder: (context) => checkPassword(),
                                   ),
                                 );
                               },

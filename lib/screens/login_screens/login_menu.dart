@@ -15,6 +15,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart' as gx;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -30,6 +31,7 @@ class _LogInState extends State<LogIn> {
   bool error = false;
   static final storage = FlutterSecureStorage();
   static final _formKey = GlobalKey<FormState>();
+  static late SharedPreferences pref;
   static String _base =
       'http://ec2-15-164-222-85.ap-northeast-2.compute.amazonaws.com:8080';
   static final _isLoadingController = gx.Get.put(IsLoadingController());
@@ -53,13 +55,18 @@ class _LogInState extends State<LogIn> {
   // 자동 로그인 매서드
   _asyncMethod() async {
     userinfo = await storage.read(key: 'login');
+    pref = await SharedPreferences.getInstance();
     _isLoadingController.isLoading = true;
 
-    if (userinfo != null) {
-      dynamic data = jsonDecode(userinfo);
+    final bool? setting = pref.getBool('autologin');
+    if (setting == true) {
       setState(() {
         checked = true;
       });
+    }
+
+    if (userinfo != null) {
+      dynamic data = jsonDecode(userinfo);
       if (await login(data['email'], data['password'], _formKey) == true) {
         _isLoadingController.isLoading = false;
       } else {
@@ -93,6 +100,7 @@ class _LogInState extends State<LogIn> {
         if (checked == true) {
           var login = await jsonEncode(Login('$accountName', '$password'));
           await storage.write(key: 'login', value: login);
+          await pref.setBool('autologin', true);
         }
 
         var token = await jsonEncode(Token(accesstoken, refreshtoken));
