@@ -16,7 +16,7 @@ class _changePasswordState extends State<changePassword> {
       appBar: AppBar(
         title: Text('비밀번호 바꾸기 메뉴'),
       ),
-      body: Text(context.watch<MemberProvider>().phoneNumber),
+      body: Text('test'),
     );
   }
 }

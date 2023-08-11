@@ -2,9 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gotowork/models/memberWorkspace_model.dart';
 import 'package:gotowork/models/workspaceInfo_model.dart';
+import 'package:gotowork/providers/controller/loadingController.dart';
 import 'package:gotowork/providers/provider/member_provider.dart';
+import 'package:gotowork/screens/login_screens/login_menu.dart';
 import 'package:gotowork/screens/main_screens/alert_menu.dart';
 import 'package:gotowork/screens/main_screens/community_menu.dart';
 import 'package:gotowork/screens/main_screens/home_menu.dart';
@@ -18,6 +21,7 @@ import 'package:gotowork/shared/menu_roundappbar.dart';
 import 'package:gotowork/shared/helper/animatedIndexedStack.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:get/get.dart' as gx;
 
 class Main extends StatelessWidget {
   static final ValueNotifier<ThemeMode> themeNotifier =
@@ -31,24 +35,28 @@ class Main extends StatelessWidget {
         return ValueListenableBuilder<ThemeMode>(
           valueListenable: themeNotifier,
           builder: (context, ThemeMode currentMode, child) {
-            return MaterialApp(
-              title: '메인 메뉴',
-              debugShowCheckedModeBanner: false,
-              darkTheme: ThemeData.dark(),
-              themeMode: currentMode,
-              theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                  brightness: Brightness.light,
-                  fontFamily: 'NotoSansKr',
-                  visualDensity: VisualDensity.adaptivePlatformDensity),
-              builder: (context, child) {
-                return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                    child: child!);
-              },
-              home: MultiProvider(providers: [
-                ChangeNotifierProvider(create: (_) => MemberProvider()),
-              ], child: MainMenu()),
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (_) => MemberProvider())
+              ],
+              child: MaterialApp(
+                title: '메인 메뉴',
+                debugShowCheckedModeBanner: false,
+                darkTheme: ThemeData.dark(),
+                themeMode: currentMode,
+                theme: ThemeData(
+                    primarySwatch: Colors.blue,
+                    brightness: Brightness.light,
+                    fontFamily: 'NotoSansKr',
+                    visualDensity: VisualDensity.adaptivePlatformDensity),
+                builder: (context, child) {
+                  return MediaQuery(
+                      data:
+                          MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                      child: child!);
+                },
+                home: MainMenu(),
+              ),
             );
           },
         );
@@ -74,20 +82,20 @@ class NavigationRoute {
 // 표시할 라벨, 아이콘, 이동할 페이지, 앱바 순으로 넣어주시면 됩니다
 final List<NavigationRoute> _routes = [
   new NavigationRoute(
-      name: "커뮤니티",
-      icon: Icon(Icons.chat_bubble),
-      page: CommunityMenu(),
-      appbar: PlainAppbar(title: '커뮤니티')),
+      name: "홈",
+      icon: Icon(Icons.home),
+      page: HomeMenu(),
+      appbar: RoundAppBar()),
+  // new NavigationRoute(
+  //     name: "커뮤니티",
+  //     icon: Icon(Icons.chat_bubble),
+  //     page: CommunityMenu(),
+  //     appbar: PlainAppbar(title: '커뮤니티')),
   new NavigationRoute(
       name: "마이페이지",
       icon: Icon(Icons.perm_identity_rounded),
       page: MypageMenu(),
       appbar: PlainAppbar(title: '마이페이지')),
-  new NavigationRoute(
-      name: "홈",
-      icon: Icon(Icons.home),
-      page: HomeMenu(),
-      appbar: RoundAppBar()),
   new NavigationRoute(
       name: "요청",
       icon: Icon(Icons.document_scanner_outlined),
@@ -117,7 +125,7 @@ class _MainMenuState extends State<MainMenu>
   late DateTime _lastPressed;
 
   // IndexedStack 현재 상태 관련 변수
-  int _currentIndex = 2;
+  int _currentIndex = 0;
   dynamic _indexedAppBar = RoundAppBar();
 
   // 인터넷 연결 확인 관련 변수들
@@ -128,6 +136,8 @@ class _MainMenuState extends State<MainMenu>
     content: const Text('인터넷 연결이 불안정합니다'),
     action: SnackBarAction(label: '확인', onPressed: () {}),
   );
+
+  static final _isLoadingController = gx.Get.put(IsLoadingController());
 
   @override
   void initState() {
@@ -150,9 +160,11 @@ class _MainMenuState extends State<MainMenu>
       },
     );
 
-    _getMemberWorkspace();
-    // 사용자 정보 받아오기
     Future.delayed(Duration.zero, () {
+      _isLoadingController.isLoading = true;
+      setState(() {
+        _getMemberWorkspace();
+      });
       _getMemberInformation();
     });
   }
@@ -190,6 +202,31 @@ class _MainMenuState extends State<MainMenu>
       } on DioError catch (e) {
         print(e);
       }
+      _isLoadingController.isLoading = false;
+    } else {
+      _isLoadingController.isLoading = false;
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext cxt) {
+            return AlertDialog(
+              content: Text('알 수 없는 이유로 로그아웃 됩니다'),
+              actions: [
+                Center(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(cxt).pop();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => LogIn()),
+                          (route) => false,
+                        );
+                      },
+                      child: Text('확인')),
+                )
+              ],
+            );
+          });
     }
   }
 
@@ -255,9 +292,34 @@ class _MainMenuState extends State<MainMenu>
     return Scaffold(
       key: _scaffoldKey,
       appBar: _indexedAppBar,
-      body: AnimatedIndexedStack(
-        index: _currentIndex,
-        children: _routes.map((route) => route.page).toList(),
+      body: Stack(
+        children: [
+          AnimatedIndexedStack(
+            index: _currentIndex,
+            children: _routes.map((route) => route.page).toList(),
+          ),
+          gx.Obx(
+            () => Offstage(
+              offstage: !_isLoadingController.isLoading,
+              child: Stack(
+                children: const <Widget>[
+                  Opacity(
+                    opacity: 0.5,
+                    child: ModalBarrier(
+                      dismissible: false,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Center(
+                    child: SpinKitFadingCircle(
+                      color: const Color(0xff60adda),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
       ),
       drawer: Drawer(
         child: Column(
