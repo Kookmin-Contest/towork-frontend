@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:gotowork/models/memberWorkspace_model.dart';
+import 'package:gotowork/models/workspaceInfo_model.dart';
 import 'package:gotowork/providers/provider/member_provider.dart';
 import 'package:gotowork/screens/main_screens/alert_menu.dart';
 import 'package:gotowork/screens/main_screens/community_menu.dart';
@@ -193,13 +195,49 @@ class _MainMenuState extends State<MainMenu>
 
   // 워크스페이스 목록 받아오기
   static int workspaceCount = 5;
-  static var items = ['워크스페이스1', '워크스페이스2', '워크스페이스3', '워크스페이스4'];
+  static var items = ['새엠소옹', '네엑쓰으은', 'CoponEat', 'Kor'];
+  static late List<WorkspaceInfo> _workspaceInfo;
 
   _getMemberWorkspace() async {
     String memberUrl = _base + '/members/workspaces';
     String workspaceUrl = _base + '/workspaces';
     var dio = await dioHandler(context, memberUrl);
-    dynamic response = null;
+    late Response response;
+    String param = "";
+    try {
+      response = await dio.get(memberUrl);
+
+      List<MemberWorkspace> workspaces =
+          response.data.map<MemberWorkspace>((parsedJson) {
+        return MemberWorkspace.fromJson(parsedJson);
+      }).toList();
+
+      workspaceCount = 2 + workspaces.length;
+
+      for (MemberWorkspace memberWorkspace in workspaces) {
+        param += memberWorkspace.id.toString();
+        param += ",";
+      }
+
+      if (workspaces.length != 0) {
+        param = param.substring(0, param.length - 1);
+      }
+    } on DioError catch (e) {
+      print(e);
+    }
+
+    workspaceUrl += param;
+    late Response response2;
+    try {
+      var dio2 = Dio(BaseOptions(receiveTimeout: 5000, connectTimeout: 5000));
+      response2 = await dio2.get(workspaceUrl);
+
+      _workspaceInfo = response2.data.map<WorkspaceInfo>((parsedJson) {
+        return WorkspaceInfo.fromJson(parsedJson);
+      }).toList();
+    } on DioError catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -253,10 +291,16 @@ class _MainMenuState extends State<MainMenu>
                     return Padding(
                       padding: EdgeInsets.only(top: 10.0.h),
                       child: ListTile(
-                        title: Text(
-                          '새 워크스페이스 만들기',
-                          style: TextStyle(),
-                        ),
+                        title: Row(children: [
+                          Text(
+                            '새 워크스페이스 만들기',
+                            style: TextStyle(),
+                          ),
+                          SizedBox(
+                            width: 5.0.w,
+                          ),
+                          Icon(Icons.add_circle)
+                        ]),
                         onTap: () {
                           Navigator.of(context).pop();
                           Navigator.of(context).push(
@@ -273,7 +317,7 @@ class _MainMenuState extends State<MainMenu>
                         backgroundColor: Colors.white,
                       ),
                       title: Text(
-                        items[index - 2],
+                        _workspaceInfo[index - 2].name,
                         style: TextStyle(fontSize: 16.0.sp),
                         overflow: TextOverflow.ellipsis,
                       ),
