@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gotowork/providers/provider/signup_provider.dart';
-import 'package:gotowork/screens/signup_screens/signup_menu2.dart';
 import 'package:gotowork/screens/signup_screens/signup_menu5.dart';
 import 'package:provider/provider.dart';
 
@@ -16,18 +15,14 @@ class SignupMenuFourth extends StatefulWidget {
 
 class _SignupMenuFourthState extends State<SignupMenuFourth> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _phoneNumber = TextEditingController();
+  TextEditingController _firstPhoneNumber = TextEditingController(text: '010');
+  TextEditingController _middlePhoneNumber = TextEditingController();
+  TextEditingController _lastPhoneNumber = TextEditingController();
 
-  bool _checkPhoneNumber(String text) {
-    //핸드폰 형식 검사
-    String pattern = r'^[0-9]{3}-[0-9]{4}-[0-9]{4}$';
-    RegExp regExp = new RegExp(pattern);
-
-    print(text);
-    if (!regExp.hasMatch(text)) {
+  bool _checkPhoneNumber(String first, String middle, String last) {
+    if (first != '010' || middle.length != 4 || last.length != 4) {
       return false;
     }
-
     return true;
   }
 
@@ -110,51 +105,40 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                       ),
                       Form(
                         key: _formKey,
-                        child: TextFormField(
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "핸드폰 번호를 입력해주세요.";
-                            } else if (!_checkPhoneNumber(value)) {
-                              return "올바른 형식의 핸드폰 번호를 입력해주세요";
-                            }
-                            return null;
-                          },
-                          controller: _phoneNumber,
-                          decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.fromLTRB(12.w, 12.h, 12.w, 12.h),
-                            filled: true,
-                            fillColor: Color(0xFFFFFFFF),
-                            focusColor: Color(0xFFFFFFFF),
-                            hintText: '핸드폰 번호를 입력하세요.',
-                            hintStyle: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w400,
-                                color: Color(0xFFDADADA)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFBABBBA),
-                                width: 1.w,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.r),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _firstPhoneNumber,
+                                enabled: false,
                               ),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFBABBBA),
-                                width: 1.w,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8.r),
+                            Text('-'),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _middlePhoneNumber,
+                                keyboardType: TextInputType.number,
+                                maxLength: 4,
                               ),
                             ),
-                          ),
+                            Text('-'),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _lastPhoneNumber,
+                                keyboardType: TextInputType.number,
+                                maxLength: 4,
+                                validator: (value) {
+                                  if (!_checkPhoneNumber(
+                                      _firstPhoneNumber.text,
+                                      _middlePhoneNumber.text,
+                                      _lastPhoneNumber.text)) {
+                                    return "올바른 형식의 핸드폰 번호를 입력해주세요";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
@@ -196,9 +180,15 @@ class _SignupMenuFourthState extends State<SignupMenuFourth> {
                                 child: IconButton(
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
+                                      String fullNumber =
+                                          _firstPhoneNumber.text +
+                                              '-' +
+                                              _middlePhoneNumber.text +
+                                              '-' +
+                                              _lastPhoneNumber.text;
                                       context
                                           .read<SignupProvider>()
-                                          .phoneNumber = _phoneNumber.text;
+                                          .phoneNumber = fullNumber;
                                       Navigator.of(context)
                                           .push(fadeRoute(SignupMenuFifth()));
                                     }
